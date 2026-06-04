@@ -1,0 +1,1356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>StudentCent — Irish Student Finance, Sorted</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#060b0f;--s1:#0a1018;--s2:#0d1520;--s3:#111c28;
+  --bd:#1a2a3a;--bd2:#1f3347;
+  --gr:#00e896;--gr2:#00cc7a;--gr3:#00a85f;
+  --gd:#f5c842;--rd:#ff5a5a;--bl:#4ab8ff;
+  --tx:#e2f0f8;--sub:#5a8a9a;--mut:#1e3545;
+  --fd:'Syne',sans-serif;--fb:'DM Sans',sans-serif;
+  --r:14px;--r2:10px;--r3:8px;
+  --shadow:0 4px 32px rgba(0,0,0,.4);
+}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--tx);font-family:var(--fb);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+::-webkit-scrollbar{width:4px}::-webkit-scrollbar-track{background:var(--bg)}::-webkit-scrollbar-thumb{background:var(--mut);border-radius:2px}
+
+/* noise */
+body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9999;opacity:.35;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.05'/%3E%3C/svg%3E")}
+
+/* layout */
+.w{max-width:1120px;margin:0 auto;padding:0 28px}
+section{padding:88px 0}
+@media(max-width:768px){section{padding:56px 0}.w{padding:0 18px}}
+
+/* typography */
+.d{font-family:var(--fd)}
+.d em{font-style:italic;color:var(--gr)}
+
+/* scroll reveal */
+.reveal{opacity:0;transform:translateY(24px);transition:opacity .65s cubic-bezier(.16,1,.3,1),transform .65s cubic-bezier(.16,1,.3,1)}
+.reveal.up{opacity:1;transform:none}
+.reveal.d1{transition-delay:.1s}.reveal.d2{transition-delay:.18s}.reveal.d3{transition-delay:.26s}
+.reveal.d4{transition-delay:.34s}.reveal.d5{transition-delay:.42s}.reveal.d6{transition-delay:.5s}
+
+/* cards */
+.card{background:var(--s2);border:1px solid var(--bd);border-radius:var(--r)}
+.card2{background:var(--s3);border:1px solid var(--bd2);border-radius:var(--r)}
+.glass{background:rgba(10,16,24,.72);backdrop-filter:blur(20px);border:1px solid var(--bd)}
+
+/* buttons */
+.btn{display:inline-flex;align-items:center;gap:8px;font-family:var(--fb);font-weight:700;border:none;cursor:pointer;transition:all .2s;text-decoration:none}
+.btn-g{background:var(--gr);color:#040810;padding:13px 26px;border-radius:var(--r2);font-size:14px}
+.btn-g:hover{background:var(--gr2);transform:translateY(-1px);box-shadow:0 8px 28px rgba(0,232,150,.22)}
+.btn-o{background:transparent;color:var(--sub);padding:13px 22px;border-radius:var(--r2);font-size:14px;border:1px solid var(--bd2)}
+.btn-o:hover{border-color:var(--gr);color:var(--tx)}
+.btn-sm{padding:9px 17px;font-size:13px;border-radius:var(--r3)}
+
+/* tags */
+.tag{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;padding:4px 11px;border-radius:100px;border:1px solid}
+.tg{color:var(--gr);border-color:rgba(0,232,150,.2);background:rgba(0,232,150,.06)}
+.tgo{color:var(--gd);border-color:rgba(245,200,66,.2);background:rgba(245,200,66,.06)}
+.tgb{color:var(--bl);border-color:rgba(74,184,255,.2);background:rgba(74,184,255,.06)}
+.tgm{color:var(--sub);border-color:var(--bd);background:rgba(255,255,255,.02)}
+
+/* section headers */
+.sh{text-align:center;margin-bottom:12px}
+.st{font-family:var(--fd);font-size:clamp(32px,3.8vw,50px);text-align:center;margin-bottom:14px;line-height:1.1;font-weight:700}
+.ss{font-size:16px;color:var(--sub);text-align:center;max-width:480px;margin:0 auto 48px;line-height:1.65}
+
+/* form elements */
+.flbl{font-size:11px;color:var(--sub);font-weight:600;text-transform:uppercase;letter-spacing:.06em;margin-bottom:9px;display:flex;justify-content:space-between;align-items:center}
+.flbl .v{font-size:15px;color:var(--gr);font-weight:700;text-transform:none;letter-spacing:0}
+.togrow{display:grid;grid-template-columns:1fr 1fr;gap:7px}
+.tog{background:var(--s1);border:1px solid var(--bd);border-radius:var(--r3);padding:10px;font-size:13px;color:var(--sub);cursor:pointer;font-family:var(--fb);font-weight:600;transition:all .2s;width:100%}
+.tog.on{background:var(--gr);color:#040810;border-color:var(--gr)}
+.tog:not(.on):hover{border-color:rgba(0,232,150,.4);color:var(--tx)}
+input[type=range]{width:100%;-webkit-appearance:none;height:3px;background:var(--bd2);border-radius:2px;outline:none;margin:10px 0 3px}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:17px;height:17px;background:var(--gr);border-radius:50%;cursor:pointer;box-shadow:0 0 10px rgba(0,232,150,.4)}
+.re{display:flex;justify-content:space-between;font-size:10px;color:var(--mut)}
+.inp{background:var(--s1);border:1px solid var(--bd2);border-radius:var(--r3);padding:10px 12px;font-size:13px;color:var(--tx);outline:none;font-family:var(--fb);transition:border-color .2s;width:100%}
+.inp:focus{border-color:var(--gr)}.inp::placeholder{color:var(--mut)}
+select.inp{cursor:pointer}
+.pills{display:flex;gap:6px;flex-wrap:wrap}
+.pill{min-width:36px;height:36px;padding:0 10px;background:var(--s1);border:1px solid var(--bd);border-radius:var(--r3);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;cursor:pointer;color:var(--sub);transition:all .2s;font-family:var(--fb);border:none}
+.pill.on,.pill.active{background:var(--gr);color:#040810}
+.pill:not(.on):not(.active):hover{background:rgba(0,232,150,.1);color:var(--gr)}
+
+/* animations */
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:none}}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+@keyframes shimmer{0%{left:-100%}100%{left:200%}}
+@keyframes ticker{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+@keyframes floatA{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+@keyframes floatB{0%,100%{transform:translateY(0)}50%{transform:translateY(8px)}}
+.a1{animation:fadeUp .7s .05s both}
+.a2{animation:fadeUp .7s .15s both}
+.a3{animation:fadeUp .7s .25s both}
+.a4{animation:fadeUp .7s .35s both}
+.a5{animation:fadeUp .7s .45s both}
+
+/* NAV */
+#nav{position:fixed;top:0;left:0;right:0;z-index:500;padding:15px 28px;display:flex;align-items:center;justify-content:space-between;transition:all .3s}
+#nav.sc{background:rgba(6,11,15,.92);backdrop-filter:blur(24px);border-bottom:1px solid var(--bd)}
+.nlogo{display:flex;align-items:center;gap:9px;text-decoration:none}
+.nmark{width:30px;height:30px;background:var(--gr);border-radius:8px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:15px;color:#040810;font-family:var(--fd)}
+.nname{font-family:var(--fd);font-weight:700;font-size:17px;color:var(--tx)}
+.nlinks{display:flex;gap:24px;list-style:none}
+.nlinks a{color:var(--sub);text-decoration:none;font-size:13px;font-weight:500;transition:color .2s}
+.nlinks a:hover{color:var(--tx)}
+.nr{display:flex;align-items:center;gap:9px}
+.nlogin{color:var(--sub);text-decoration:none;font-size:13px;font-weight:600;transition:color .2s}
+.nlogin:hover{color:var(--tx)}
+@media(max-width:768px){#nav{padding:13px 18px}.nlinks,.nlogin{display:none}}
+
+/* HERO */
+#hero{min-height:100vh;display:flex;align-items:center;padding:120px 0 70px;position:relative;overflow:hidden}
+.orb{position:absolute;border-radius:50%;pointer-events:none}
+.orb1{width:600px;height:600px;background:radial-gradient(circle,rgba(0,232,150,.08) 0%,transparent 70%);top:50%;left:40%;transform:translate(-50%,-50%)}
+.orb2{width:350px;height:350px;background:radial-gradient(circle,rgba(74,184,255,.06) 0%,transparent 70%);bottom:5%;right:8%}
+.hg{display:grid;grid-template-columns:1fr 400px;gap:64px;align-items:center}
+.hey{display:flex;align-items:center;gap:7px;margin-bottom:20px}
+.hdot{width:6px;height:6px;background:var(--gr);border-radius:50%;animation:pulse 2s infinite}
+.heyT{font-size:12px;color:var(--sub);font-weight:600;letter-spacing:.04em}
+.h1{font-family:var(--fd);font-size:clamp(46px,5.2vw,70px);line-height:1.07;font-weight:800;margin-bottom:20px}
+.hp{font-size:17px;line-height:1.75;color:var(--sub);max-width:450px;margin-bottom:30px}
+.hp strong{color:var(--tx);font-weight:600}
+.hbtns{display:flex;gap:9px;flex-wrap:wrap;margin-bottom:28px}
+.hproof{display:flex;gap:18px;flex-wrap:wrap}
+.pi{display:flex;align-items:center;gap:5px;font-size:12px;color:var(--mut)}
+.pc{color:var(--gr)}
+/* float cards */
+.fcards{display:flex;flex-direction:column;gap:10px}
+.fcard{padding:18px 20px;animation:floatA 6s ease-in-out infinite}
+.fcard:nth-child(2){animation:floatB 7s ease-in-out infinite}
+.fcard:nth-child(3){animation:floatA 5s ease-in-out infinite;animation-delay:1s}
+.fc-l{font-size:10px;color:var(--sub);text-transform:uppercase;letter-spacing:.08em;margin-bottom:5px}
+.fc-v{font-family:var(--fd);font-size:26px;line-height:1}
+.fc-s{font-size:11px;color:var(--mut);margin-top:3px}
+.fc-b{height:3px;background:var(--mut);border-radius:2px;margin-top:9px;overflow:hidden;position:relative}
+.fc-bf{height:100%;border-radius:2px;position:relative;overflow:hidden}
+.fc-bf::after{content:'';position:absolute;top:0;left:-100%;width:60%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.3),transparent);animation:shimmer 2.5s infinite}
+@media(max-width:900px){.hg{grid-template-columns:1fr;gap:36px}.fcards{display:none}}
+
+/* TICKER */
+#ticker{padding:12px 0;background:var(--s1);border-top:1px solid var(--bd);border-bottom:1px solid var(--bd);overflow:hidden;white-space:nowrap;cursor:default}
+.tick-t{display:inline-flex;animation:ticker 35s linear infinite}
+.tick-i{display:inline-flex;align-items:center;gap:7px;padding:0 32px;font-size:12px;color:var(--sub);font-weight:500}
+.tick-i b{color:var(--gr);font-weight:700}
+.tick-sep{color:var(--mut);padding:0 6px}
+
+/* STATS */
+#stats{padding:56px 0;border-bottom:1px solid var(--bd)}
+.stg{display:grid;grid-template-columns:repeat(4,1fr);background:var(--bd);gap:1px;border-radius:var(--r);overflow:hidden}
+.sb{background:var(--s1);padding:28px 20px;text-align:center}
+.sn{font-family:var(--fd);font-size:clamp(30px,3.5vw,46px);color:var(--gr);line-height:1;margin-bottom:6px;font-weight:800}
+.sl{font-size:13px;color:var(--tx);font-weight:600;margin-bottom:3px}
+.su{font-size:11px;color:var(--mut)}
+@media(max-width:768px){.stg{grid-template-columns:1fr 1fr}}
+
+/* FEATURES */
+.fg{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.fc{padding:20px;transition:all .3s;position:relative;overflow:hidden;cursor:default}
+.fc::after{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(0,232,150,.04),transparent);opacity:0;transition:opacity .3s}
+.fc:hover{border-color:rgba(0,232,150,.3);transform:translateY(-2px)}.fc:hover::after{opacity:1}
+.fi{width:40px;height:40px;background:rgba(0,232,150,.08);border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:18px;margin-bottom:13px}
+.ft{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:6px}
+.ftitle{font-size:14px;font-weight:700;color:var(--tx);font-family:var(--fd)}
+.fd2{font-size:13px;color:var(--sub);line-height:1.6}
+@media(max-width:900px){.fg{grid-template-columns:1fr 1fr}}
+@media(max-width:600px){.fg{grid-template-columns:1fr}}
+
+/* CALC */
+.cg{display:grid;grid-template-columns:1fr 1fr;gap:36px;align-items:start}
+.cf{padding:26px}
+.fg2{margin-bottom:20px}
+.cbtn{width:100%;background:var(--gr);color:#040810;font-family:var(--fb);font-weight:700;font-size:14px;padding:14px;border-radius:var(--r2);border:none;cursor:pointer;transition:all .2s}
+.cbtn:hover{background:var(--gr2);transform:translateY(-1px)}
+.cph{padding:44px 28px;text-align:center}
+.crs{display:flex;flex-direction:column;gap:10px}
+.rhero{background:linear-gradient(135deg,rgba(0,232,150,.09),rgba(0,232,150,.02));border:1px solid rgba(0,232,150,.22);border-radius:var(--r);padding:22px}
+.rt{font-size:10px;color:var(--sub);text-transform:uppercase;letter-spacing:.07em;margin-bottom:3px}
+.rv{font-family:var(--fd);font-size:40px;color:var(--gr);line-height:1;font-weight:800}
+.rs{font-size:12px;color:var(--sub);margin-top:5px}
+.rmg{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.rmi{padding:14px}
+.rmil{font-size:10px;color:var(--sub);margin-bottom:5px}
+.rmiv{font-size:18px;font-weight:700;color:var(--tx);font-family:var(--fd)}
+.rsteps{padding:18px}
+.rst{font-size:10px;color:var(--sub);text-transform:uppercase;letter-spacing:.07em;margin-bottom:10px}
+.rsi{display:flex;gap:9px;align-items:flex-start;margin-bottom:9px}
+.rsn{width:19px;height:19px;min-width:19px;background:rgba(0,232,150,.1);border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:var(--gr)}
+.rst2{font-size:13px;color:var(--sub);line-height:1.5}
+.dbox{background:rgba(245,200,66,.04);border:1px solid rgba(245,200,66,.15);border-radius:var(--r2);padding:11px 13px;font-size:12px;color:var(--sub);line-height:1.5}
+@media(max-width:900px){.cg{grid-template-columns:1fr}}
+
+/* TRACKER */
+.tg2{display:grid;grid-template-columns:1.1fr .9fr;gap:36px;align-items:start}
+.tc{padding:26px}
+.tlb{font-size:10px;color:var(--sub);text-transform:uppercase;letter-spacing:.08em;margin-bottom:5px}
+.tv{font-family:var(--fd);font-size:48px;line-height:1;transition:color .4s;font-weight:800}
+.tsb{font-size:12px;color:var(--mut);margin-bottom:18px}
+.pb{height:9px;background:var(--bd2);border-radius:5px;overflow:hidden;position:relative}
+.pf{height:100%;border-radius:5px;transition:width .7s cubic-bezier(.4,0,.2,1),background .4s;position:relative;overflow:hidden}
+.pf::after{content:'';position:absolute;top:0;left:-100%;width:50%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.2),transparent);animation:shimmer 2.5s infinite}
+.pe{display:flex;justify-content:space-between;font-size:10px;color:var(--mut);margin-top:4px}
+.sp{display:inline-flex;align-items:center;gap:5px;padding:5px 12px;border-radius:100px;font-size:11px;font-weight:700;border:1px solid;margin-top:11px}
+.sp-s{background:rgba(0,232,150,.08);color:var(--gr);border-color:rgba(0,232,150,.2)}
+.sp-w{background:rgba(245,200,66,.08);color:var(--gd);border-color:rgba(245,200,66,.2)}
+.sp-d{background:rgba(255,90,90,.08);color:var(--rd);border-color:rgba(255,90,90,.2)}
+.ents{display:flex;flex-direction:column;gap:5px;margin:12px 0}
+.ent{display:flex;align-items:center;gap:9px;background:var(--s1);border:1px solid var(--bd);border-radius:var(--r3);padding:9px 13px}
+.ed{flex:1;font-size:13px;color:var(--tx);font-weight:600}
+.ei{font-size:11px;color:var(--mut)}
+.ea{font-size:13px;font-weight:700;color:var(--gr)}
+.edel{background:none;border:none;color:var(--mut);cursor:pointer;font-size:14px;transition:color .2s;padding:0 2px;line-height:1}
+.edel:hover{color:var(--rd)}
+.ar{display:grid;grid-template-columns:1fr 1fr 1fr auto;gap:5px;margin-top:9px;padding-top:12px;border-top:1px solid var(--bd)}
+.ap{background:var(--s3);border:1px solid var(--bd2);border-radius:var(--r3);width:38px;height:38px;display:flex;align-items:center;justify-content:center;font-size:18px;color:var(--sub);cursor:pointer;transition:all .2s}
+.ap:hover{border-color:var(--gr);color:var(--gr)}
+.ib{background:var(--s1);border:1px solid var(--bd);border-radius:var(--r2);padding:14px}
+.ib p{font-size:13px;color:var(--sub);line-height:1.6}
+.ib strong{color:var(--tx)}
+@media(max-width:900px){.tg2{grid-template-columns:1fr}}
+
+/* CITY */
+.ctabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px}
+.ctab{padding:13px 16px;cursor:pointer;transition:all .2s;text-align:center;min-width:115px}
+.ctab.on{border-width:1.5px}
+.ctn{font-size:13px;font-weight:700;color:var(--tx);margin-bottom:1px}
+.ctv{font-family:var(--fd);font-size:21px;line-height:1;font-weight:700}
+.cts{font-size:10px;color:var(--gr);margin-top:1px}
+.cc{padding:22px}
+.brow{display:flex;align-items:center;gap:9px;margin-bottom:9px}
+.blb{width:105px;font-size:11px;color:var(--sub);text-align:right;flex-shrink:0}
+.btr{flex:1}
+.bcs{display:flex;flex-direction:column;gap:3px}
+.bcr{display:flex;align-items:center;gap:5px}
+.bcn{width:48px;font-size:10px;color:var(--sub)}
+.bbg{flex:1;height:20px;background:var(--bd);border-radius:4px;overflow:hidden}
+.bf{height:100%;border-radius:4px;display:flex;align-items:center;padding:0 7px;transition:width .5s cubic-bezier(.4,0,.2,1)}
+.bft{font-size:10px;font-weight:700;color:rgba(4,8,16,.75)}
+
+/* RENT */
+.rg{display:grid;grid-template-columns:1fr 1fr;gap:36px}
+.rform{padding:26px}
+.rres{display:flex;flex-direction:column;gap:12px}
+@media(max-width:900px){.rg{grid-template-columns:1fr}}
+
+/* INTL */
+.ig{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.ic{padding:20px}
+.ic-i{font-size:22px;margin-bottom:10px}
+.ic-t{font-size:13px;font-weight:700;color:var(--tx);margin-bottom:9px;font-family:var(--fd)}
+.ic-l{list-style:none;display:flex;flex-direction:column;gap:6px}
+.ic-l li{display:flex;gap:7px;font-size:12px;color:var(--sub);line-height:1.5}
+.ic-l li::before{content:'→';color:var(--gr);flex-shrink:0;font-weight:700}
+@media(max-width:768px){.ig{grid-template-columns:1fr}}
+
+/* DISCOUNTS */
+.dg{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.dc{padding:16px;transition:all .2s}
+.dc:hover{border-color:rgba(0,232,150,.2);transform:translateY(-1px)}
+.dc-c{font-size:9px;color:var(--sub);text-transform:uppercase;letter-spacing:.08em;margin-bottom:5px}
+.dc-n{font-size:13px;font-weight:700;color:var(--tx);margin-bottom:3px;font-family:var(--fd)}
+.dc-s{font-size:12px;color:var(--gr);font-weight:700}
+.dc-d{font-size:11px;color:var(--mut);margin-top:2px;line-height:1.4}
+@media(max-width:768px){.dg{grid-template-columns:1fr 1fr}}
+
+/* TESTIMONIALS */
+.testg{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.testc{padding:20px;transition:all .3s}
+.testc:hover{border-color:rgba(0,232,150,.2)}
+.testt{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:12px}
+.testn{font-size:13px;font-weight:700;color:var(--tx);font-family:var(--fd)}
+.testco{font-size:11px;color:var(--mut);margin-top:2px}
+.testq{font-size:13px;color:var(--sub);line-height:1.7;font-style:italic;margin-bottom:10px}
+.stars{color:var(--gd);font-size:12px;letter-spacing:2px}
+@media(max-width:768px){.testg{grid-template-columns:1fr}}
+
+/* PRICING */
+.prg{display:grid;grid-template-columns:1fr 1fr;gap:14px;max-width:780px;margin:0 auto}
+.prc{padding:26px;display:flex;flex-direction:column;gap:16px}
+.prc.hot{border-color:rgba(0,232,150,.3);position:relative;overflow:hidden}
+.prc.hot::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--gr),transparent)}
+.pb2{position:absolute;top:16px;right:16px;background:var(--gr);color:#040810;font-size:10px;font-weight:800;padding:3px 9px;border-radius:100px;text-transform:uppercase;letter-spacing:.06em}
+.pn{font-size:15px;font-weight:700;color:var(--tx);font-family:var(--fd)}
+.pd{font-size:12px;color:var(--sub);margin-top:2px}
+.pa{font-family:var(--fd);font-size:48px;color:var(--tx);line-height:1;font-weight:800}
+.pa.gr{color:var(--gr)}
+.pp{font-size:13px;color:var(--mut)}
+.pan{font-size:11px;color:var(--sub);margin-top:3px}
+.pan strong{color:var(--gr)}
+.pf2{list-style:none;display:flex;flex-direction:column;gap:8px;flex:1}
+.pf2 li{display:flex;align-items:flex-start;gap:7px;font-size:13px;color:var(--sub)}
+.pf2 li::before{content:'✓';color:var(--gr);font-weight:700;flex-shrink:0}
+@media(max-width:600px){.prg{grid-template-columns:1fr}}
+
+/* FAQ */
+.faqlist{display:flex;flex-direction:column;gap:2px;max-width:700px;margin:0 auto}
+.faqi{overflow:hidden;border-radius:var(--r2)}
+.faqq{display:flex;align-items:center;justify-content:space-between;padding:15px 18px;cursor:pointer;font-size:14px;font-weight:600;color:var(--tx);transition:color .2s;gap:10px;background:var(--s2);border:1px solid var(--bd)}
+.faqq:hover{color:var(--gr)}
+.faqa2{color:var(--sub);transition:transform .3s;flex-shrink:0}
+.faqi.open .faqa2{transform:rotate(180deg)}
+.faqans{max-height:0;overflow:hidden;transition:max-height .35s ease,padding .35s;font-size:13px;color:var(--sub);line-height:1.7;padding:0 18px;background:var(--s1);border:1px solid var(--bd);border-top:none}
+.faqi.open .faqans{max-height:200px;padding:0 18px 14px}
+
+/* DASHBOARD */
+#dash{display:none;position:fixed;inset:0;z-index:400;background:var(--bg)}
+#dash.open{display:flex}
+.dside{width:210px;background:var(--s1);border-right:1px solid var(--bd);display:flex;flex-direction:column;flex-shrink:0}
+.dlw{padding:16px;border-bottom:1px solid var(--bd)}
+.dnav{flex:1;padding:10px;overflow-y:auto}
+.db{display:flex;align-items:center;gap:8px;padding:9px 10px;border-radius:var(--r3);color:var(--sub);font-size:13px;font-weight:600;cursor:pointer;transition:all .2s;margin-bottom:2px;border:none;background:none;width:100%;font-family:var(--fb);text-align:left}
+.db:hover{background:var(--s2);color:var(--tx)}
+.db.on{background:rgba(0,232,150,.08);color:var(--gr);border:1px solid rgba(0,232,150,.15)}
+.dbico{font-size:14px;flex-shrink:0}
+.dpro{font-size:9px;font-weight:700;background:rgba(255,255,255,.04);color:var(--mut);padding:2px 5px;border-radius:3px;margin-left:auto}
+.dfoot{padding:13px;border-top:1px solid var(--bd)}
+.dup{background:rgba(0,232,150,.05);border:1px solid rgba(0,232,150,.15);border-radius:11px;padding:12px;margin-bottom:9px}
+.dut{font-size:12px;font-weight:700;color:var(--tx);margin-bottom:2px;font-family:var(--fd)}
+.dus{font-size:11px;color:var(--mut);margin-bottom:8px;line-height:1.4}
+.dub{width:100%;background:var(--gr);color:#040810;font-family:var(--fb);font-weight:700;font-size:12px;padding:8px;border-radius:var(--r3);border:none;cursor:pointer;transition:all .2s}
+.dub:hover{background:var(--gr2)}
+.dbk{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--mut);background:none;border:none;cursor:pointer;font-family:var(--fb);padding:3px;transition:color .2s}
+.dbk:hover{color:var(--sub)}
+.dmain{flex:1;overflow-y:auto;padding:26px 28px;background:var(--bg)}
+.dp{display:none;flex-direction:column;gap:22px}
+.dp.on{display:flex}
+.dpt{font-family:var(--fd);font-size:32px;margin-bottom:2px;font-weight:700}
+.dps{font-size:13px;color:var(--sub)}
+.d3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.d2{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+.dcard{padding:18px}
+.dcl{font-size:10px;color:var(--sub);text-transform:uppercase;letter-spacing:.07em;margin-bottom:7px}
+.dcv{font-family:var(--fd);font-size:34px;line-height:1;font-weight:700}
+.dcs{font-size:11px;color:var(--mut);margin-top:4px}
+.acard{display:flex;align-items:center;gap:12px;padding:13px 15px;cursor:pointer;transition:all .2s;border-radius:var(--r2);background:var(--s2);border:1px solid var(--bd)}
+.acard:hover{border-color:rgba(0,232,150,.25);transform:translateX(2px)}
+.aico{width:34px;height:34px;border-radius:var(--r3);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
+.ati{font-size:13px;font-weight:600;color:var(--tx)}
+.ava{font-size:11px;color:var(--sub);margin-top:1px}
+.aar{margin-left:auto;color:var(--mut);font-size:15px}
+.dli{display:flex;gap:9px;align-items:flex-start;margin-bottom:9px}
+.dlic{font-size:12px;margin-top:1px}
+.dlt{font-size:13px;color:var(--tx);line-height:1.35}
+.dld{font-size:10px;font-weight:700;margin-top:2px}
+.dcl2{background:rgba(0,232,150,.04);border:1px solid rgba(0,232,150,.15);border-radius:var(--r2);padding:11px;font-size:12px;color:var(--sub)}
+.dclose{position:fixed;top:14px;right:18px;z-index:401;background:var(--s2);border:1px solid var(--bd);border-radius:var(--r3);width:32px;height:32px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:15px;color:var(--sub);transition:all .2s}
+.dclose:hover{color:var(--tx);border-color:var(--gr)}
+@media(max-width:768px){.dside{width:175px}.dmain{padding:18px 14px}.d3{grid-template-columns:1fr 1fr}.d2{grid-template-columns:1fr}}
+
+/* CTA */
+#cta{background:radial-gradient(ellipse at 50% 110%,rgba(0,232,150,.09) 0%,transparent 55%)}
+.ctain{text-align:center;max-width:520px;margin:0 auto}
+.ctaico{width:56px;height:56px;background:rgba(0,232,150,.1);border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:24px;margin:0 auto 20px}
+
+/* FOOTER */
+footer{padding:24px 0;border-top:1px solid var(--bd)}
+.fi{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px}
+.flinks{display:flex;gap:16px}
+.flinks a{font-size:12px;color:var(--mut);text-decoration:none;transition:color .2s}
+.flinks a:hover{color:var(--sub)}
+.fn{font-size:11px;color:var(--mut);max-width:360px;text-align:center;line-height:1.5}
+
+/* sticky upgrade bar */
+#sticky-bar{position:fixed;bottom:0;left:0;right:0;z-index:300;background:linear-gradient(90deg,#0a1018,#0d1520);border-top:1px solid var(--bd2);padding:12px 28px;display:flex;align-items:center;justify-content:space-between;gap:16px;transform:translateY(100%);transition:transform .4s cubic-bezier(.16,1,.3,1)}
+#sticky-bar.show{transform:translateY(0)}
+.sbar-txt{font-size:13px;color:var(--sub)}
+.sbar-txt strong{color:var(--tx)}
+.sbar-right{display:flex;align-items:center;gap:12px;flex-shrink:0}
+.sbar-dismiss{background:none;border:none;color:var(--mut);cursor:pointer;font-size:18px;line-height:1;transition:color .2s}
+.sbar-dismiss:hover{color:var(--sub)}
+@media(max-width:768px){.sbar-txt{display:none}#sticky-bar{justify-content:center}}
+
+/* hamburger */
+.hamburger{display:none;flex-direction:column;gap:5px;background:none;border:none;cursor:pointer;padding:4px}
+.hamburger span{width:22px;height:2px;background:var(--sub);border-radius:2px;transition:all .3s;display:block}
+@media(max-width:768px){.hamburger{display:flex}}
+#mobile-menu{display:none;position:fixed;top:58px;left:0;right:0;z-index:400;background:var(--s1);border-bottom:1px solid var(--bd);padding:16px 18px;flex-direction:column;gap:4px}
+#mobile-menu.open{display:flex}
+#mobile-menu a{color:var(--sub);text-decoration:none;font-size:14px;font-weight:600;padding:10px 12px;border-radius:var(--r3);transition:all .2s}
+#mobile-menu a:hover{background:var(--s2);color:var(--tx)}
+
+/* pro lock overlay */
+.pro-lock{position:relative}
+.pro-lock::after{content:'🔒 Pro';position:absolute;top:8px;right:8px;background:rgba(245,200,66,.12);color:var(--gd);font-size:10px;font-weight:700;padding:3px 8px;border-radius:100px;border:1px solid rgba(245,200,66,.2)}
+
+/* pulse dot on live tools */
+.live-dot{display:inline-flex;align-items:center;gap:5px;font-size:11px;color:var(--gr);font-weight:600}
+.live-dot::before{content:'';width:6px;height:6px;background:var(--gr);border-radius:50%;display:inline-block;animation:pulse 2s infinite}
+
+/* star rating */
+.rating-bar{display:flex;align-items:center;gap:10px;margin-bottom:32px;justify-content:center}
+.rating-stars{color:var(--gd);font-size:16px;letter-spacing:2px}
+.rating-txt{font-size:13px;color:var(--sub)}
+
+/* trust badges */
+.trust-row{display:flex;align-items:center;justify-content:center;gap:24px;flex-wrap:wrap;margin-top:28px}
+.trust-item{display:flex;align-items:center;gap:7px;font-size:12px;color:var(--mut)}
+.trust-ico{font-size:15px}
+
+/* most popular badge on pricing */
+.most-pop{position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:var(--gr);color:#040810;font-size:11px;font-weight:800;padding:3px 12px;border-radius:100px;white-space:nowrap}
+
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="nav">
+  <a href="#" class="nlogo"><div class="nmark">€</div><span class="nname">StudentCent</span></a>
+  <ul class="nlinks">
+    <li><a href="#features">Features</a></li>
+    <li><a href="#calculator">SUSI Calc</a></li>
+    <li><a href="#worktracker">Work Tracker</a></li>
+    <li><a href="#pricing">Pricing</a></li>
+  </ul>
+  <div class="nr">
+    <a href="#" class="nlogin" onclick="openDash(event)">Log in</a>
+    <button class="btn btn-g btn-sm" onclick="openDash(event)">Get started →</button>
+    <button class="hamburger" id="hamburger" onclick="toggleMobileMenu()" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+<div id="mobile-menu">
+  <a href="#features" onclick="closeMobileMenu()">Features</a>
+  <a href="#calculator" onclick="closeMobileMenu()">SUSI Calc</a>
+  <a href="#worktracker" onclick="closeMobileMenu()">Work Tracker</a>
+  <a href="#pricing" onclick="closeMobileMenu()">Pricing</a>
+  <button class="btn btn-g" style="width:100%;justify-content:center;margin-top:8px" onclick="openDash(event);closeMobileMenu()">Get started free →</button>
+</div>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="orb orb1"></div><div class="orb orb2"></div>
+  <div class="w">
+    <div class="hg">
+      <div>
+        <div class="hey a1"><div class="hdot"></div><span class="heyT">Built for Irish &amp; international students</span></div>
+        <h1 class="h1 d a2">Find the money<br>you're <em>owed.</em></h1>
+        <p class="hp a3">SUSI grants, rent tax credits, work limits, scholarship deadlines — all in one place. The average StudentCent user finds <strong>€1,340</strong> they didn't know they were entitled to.</p>
+        <div class="hbtns a4">
+          <button class="btn btn-g" onclick="document.getElementById('quiz-anchor').scrollIntoView({behavior:'smooth'})">Check what you're owed →</button>
+          <button class="btn btn-o" onclick="openDash(event)">View dashboard</button>
+        </div>
+        <div class="hproof a5">
+          <span class="pi"><span class="pc">✓</span> Free to start</span>
+          <span class="pi"><span class="pc">✓</span> No credit card</span>
+          <span class="pi"><span class="pc">✓</span> 60 seconds</span>
+          <span class="pi"><span class="pc">✓</span> Irish &amp; international</span>
+        </div>
+        <div class="trust-row a5" style="justify-content:flex-start;margin-top:16px">
+          <span class="trust-item"><span class="trust-ico">🔒</span> SSL Secure</span>
+          <span class="trust-item"><span class="trust-ico">🇮🇪</span> Built in Ireland</span>
+          <span class="trust-item"><span class="trust-ico">⭐</span> 4.9/5 rating</span>
+          <span class="trust-item"><span class="trust-ico">👥</span> 127+ beta users</span>
+        </div>
+      </div>
+      <div class="fcards a3">
+        <div class="fcard card"><div class="fc-l">SUSI grant (estimated)</div><div class="fc-v" style="color:var(--gr)">€3,458</div><div class="fc-s">Maintenance + fees for 2025/26</div><div class="fc-b"><div class="fc-bf" style="width:78%;background:var(--gr)"></div></div></div>
+        <div class="fcard card"><div class="fc-l">Work earnings this summer</div><div class="fc-v" style="color:var(--gd)">€4,860</div><div class="fc-s">€3,564 remaining before limit</div><div class="fc-b"><div class="fc-bf" style="width:57%;background:var(--gd)"></div></div></div>
+        <div class="fcard card"><div class="fc-l">Money found for you</div><div class="fc-v" style="color:var(--bl)">€1,340</div><div class="fc-s">Grants + credits identified</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TICKER -->
+<div id="ticker">
+  <div class="tick-t" id="tick-t">
+    <span class="tick-i">🎓 SUSI 2026/27 <b>now open</b></span><span class="tick-sep">·</span>
+    <span class="tick-i">💰 Rent Tax Credit <b>€1,000</b> in 2025</span><span class="tick-sep">·</span>
+    <span class="tick-i">🛡️ Holiday earnings limit <b>€8,424</b></span><span class="tick-sep">·</span>
+    <span class="tick-i">📍 Galway <b>€4,200/yr</b> cheaper than Dublin</span><span class="tick-sep">·</span>
+    <span class="tick-i">🌍 Govt of Ireland scholarship <b>€25,000/yr</b></span><span class="tick-sep">·</span>
+    <span class="tick-i">⚡ Priority SUSI deadline <b>late July 2026</b></span><span class="tick-sep">·</span>
+    <span class="tick-i">🎓 SUSI 2026/27 <b>now open</b></span><span class="tick-sep">·</span>
+    <span class="tick-i">💰 Rent Tax Credit <b>€1,000</b> in 2025</span><span class="tick-sep">·</span>
+    <span class="tick-i">🛡️ Holiday earnings limit <b>€8,424</b></span><span class="tick-sep">·</span>
+    <span class="tick-i">📍 Galway <b>€4,200/yr</b> cheaper than Dublin</span><span class="tick-sep">·</span>
+    <span class="tick-i">🌍 Govt of Ireland scholarship <b>€25,000/yr</b></span><span class="tick-sep">·</span>
+    <span class="tick-i">⚡ Priority SUSI deadline <b>late July 2026</b></span><span class="tick-sep">·</span>
+  </div>
+</div>
+
+<!-- STATS -->
+<div id="stats"><div class="w">
+  <div class="stg">
+    <div class="sb reveal"><div class="sn" data-target="50000" data-suf="+">0</div><div class="sl">Irish students/year</div><div class="su">new each September</div></div>
+    <div class="sb reveal d1"><div class="sn" data-target="35000" data-suf="+">0</div><div class="sl">International students</div><div class="su">in Irish HEIs</div></div>
+    <div class="sb reveal d2"><div class="sn" data-target="1340" data-pre="€">0</div><div class="sl">Average found</div><div class="su">per student user</div></div>
+    <div class="sb reveal d3"><div class="sn" data-target="8424" data-pre="€">0</div><div class="sl">SUSI holiday limit</div><div class="su">easy to miss</div></div>
+  </div>
+</div></div>
+
+<!-- QUIZ -->
+<section style="background:var(--s1)" id="quiz-anchor"><div class="w">
+  <div style="max-width:460px;margin:0 auto">
+    <div class="sh"><span class="tag tg">60 seconds</span></div>
+    <h2 class="st">What are you owed?</h2>
+    <p class="ss">5 quick questions and we'll show exactly what money you're entitled to.</p>
+    <div class="card" style="padding:26px">
+      <div style="display:flex;align-items:center;gap:11px;padding-bottom:16px;border-bottom:1px solid var(--bd);margin-bottom:18px">
+        <div style="width:36px;height:36px;background:rgba(0,232,150,.1);border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:16px">🧮</div>
+        <div><div style="font-size:14px;font-weight:700;color:var(--tx);font-family:var(--fd)">Money Quiz</div><div style="font-size:12px;color:var(--sub);margin-top:1px">Personalised to your situation</div></div>
+      </div>
+      <div style="display:flex;gap:4px;margin-bottom:16px" id="qprog">
+        <div style="flex:1;height:3px;border-radius:2px;background:var(--gr)" class="qpd"></div>
+        <div style="flex:1;height:3px;border-radius:2px;background:var(--bd2)" class="qpd"></div>
+        <div style="flex:1;height:3px;border-radius:2px;background:var(--bd2)" class="qpd"></div>
+        <div style="flex:1;height:3px;border-radius:2px;background:var(--bd2)" class="qpd"></div>
+        <div style="flex:1;height:3px;border-radius:2px;background:var(--bd2)" class="qpd"></div>
+      </div>
+      <div id="qbody">
+        <div style="font-size:15px;font-weight:600;color:var(--tx);margin-bottom:13px;line-height:1.45;font-family:var(--fd)" id="qq"></div>
+        <div style="display:flex;flex-direction:column;gap:6px" id="qopts"></div>
+        <div style="font-size:11px;color:var(--mut);text-align:center;margin-top:9px" id="qstep"></div>
+      </div>
+      <div id="qres" style="display:none">
+        <div style="display:flex;flex-direction:column;align-items:center;gap:9px;margin-bottom:14px">
+          <svg id="qsvg" width="108" height="108" viewBox="0 0 108 108">
+            <circle cx="54" cy="54" r="45" fill="none" stroke="var(--bd2)" stroke-width="7"/>
+            <circle id="qcirc" cx="54" cy="54" r="45" fill="none" stroke="var(--gr)" stroke-width="7" stroke-dasharray="283" stroke-dashoffset="283" stroke-linecap="round" style="transform:rotate(-90deg);transform-origin:50% 50%;transition:stroke-dashoffset 1.4s cubic-bezier(.4,0,.2,1)"/>
+            <text id="qnum" x="54" y="49" text-anchor="middle" fill="var(--gr)" font-size="24" font-weight="700" font-family="Syne,sans-serif">0</text>
+            <text x="54" y="65" text-anchor="middle" fill="var(--sub)" font-size="10" font-family="DM Sans,sans-serif">/100</text>
+          </svg>
+          <span id="qpill" class="tag tg" style="font-size:10px"></span>
+        </div>
+        <div style="background:rgba(0,232,150,.06);border:1px solid rgba(0,232,150,.18);border-radius:11px;padding:13px;text-align:center;margin-bottom:12px">
+          <div style="font-size:10px;color:var(--sub);text-transform:uppercase;letter-spacing:.08em;margin-bottom:3px">You could be owed</div>
+          <div style="font-family:var(--fd);font-size:38px;color:var(--gr);line-height:1;font-weight:800" id="qtotal">€0</div>
+          <div style="font-size:11px;color:var(--sub);margin-top:2px">in grants, credits &amp; refunds</div>
+        </div>
+        <div id="qbd" style="display:flex;flex-direction:column;gap:4px;margin-bottom:12px"></div>
+        <button onclick="openDash(event)" style="width:100%;background:var(--gr);color:#040810;font-family:var(--fb);font-weight:700;font-size:14px;padding:12px;border-radius:var(--r3);border:none;cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:6px">Show me how to claim it →</button>
+        <button onclick="quizReset()" style="background:none;border:none;font-size:11px;color:var(--mut);cursor:pointer;font-family:var(--fb);margin-top:6px;width:100%;transition:color .2s">↺ Start again</button>
+      </div>
+    </div>
+  </div>
+</div></section>
+
+<!-- FEATURES -->
+<section id="features"><div class="w">
+  <div class="sh"><span class="tag tg">Everything you need</span></div>
+  <h2 class="st">Tools that actually help</h2>
+  <p class="ss">Not generic finance advice. Irish-specific tools built around the real systems students deal with every year.</p>
+  <div class="fg">
+    <div class="fc card reveal"><div class="fi">🧮</div><div class="ft"><span class="ftitle">SUSI Calculator</span><span class="tag tg">Free</span></div><p class="fd2">Enter household income and see your exact grant — maintenance and fees — instantly. 2025/26 thresholds.</p></div>
+    <div class="fc card reveal d1"><div class="fi">🏠</div><div class="ft"><span class="ftitle">Rent Tax Credit</span><span class="tag tg">Free</span></div><p class="fd2">Up to €1,000 back on 2025 rent. Eligibility check + exact Revenue step-by-step claim guide.</p></div>
+    <div class="fc card reveal d2"><div class="fi">⭐</div><div class="ft"><span class="ftitle">Money Score</span><span class="tag tg">Free</span></div><p class="fd2">Score out of 100 showing how well you're using your entitlements. Shareable — goes viral every September.</p></div>
+    <div class="fc card reveal d3"><div class="fi">📍</div><div class="ft"><span class="ftitle">City Comparator</span><span class="tag tg">Free</span></div><p class="fd2">Dublin vs Cork vs Galway vs Limerick. See exactly how much you save studying outside the capital.</p></div>
+    <div class="fc card reveal d4 pro-lock"><div class="fi">🛡️</div><div class="ft"><span class="ftitle">Work Tracker</span><span class="tag tgm">Pro</span></div><p class="fd2">Track holiday earnings vs the €8,424 SUSI limit. Alerts before you accidentally lose your grant.</p></div>
+    <div class="fc card reveal d5 pro-lock"><div class="fi">🔔</div><div class="ft"><span class="ftitle">Deadline Alerts</span><span class="tag tgm">Pro</span></div><p class="fd2">SUSI opens, tax return due, college registration — never miss a money deadline. Email reminders built in.</p></div>
+    <div class="fc card reveal pro-lock"><div class="fi">🌍</div><div class="ft"><span class="ftitle">International Hub</span><span class="tag tgm">Pro</span></div><p class="fd2">Visa funds, work permit hours, Irish tax, scholarship deadlines — everything non-EU students need.</p></div>
+    <div class="fc card reveal d1 pro-lock"><div class="fi">💰</div><div class="ft"><span class="ftitle">Budget Tracker</span><span class="tag tgm">Pro</span></div><p class="fd2">Income, rent, food, transport, subscriptions. Visual breakdown of exactly where your money goes.</p></div>
+    <div class="fc card reveal d2 pro-lock"><div class="fi">🎁</div><div class="ft"><span class="ftitle">Student Discounts</span><span class="tag tgm">Pro</span></div><p class="fd2">Ireland-specific deals — Leap Card, banking, software, food near campus. Updated monthly.</p></div>
+  </div>
+</div></section>
+
+<!-- SUSI CALCULATOR -->
+<section id="calculator" style="background:var(--s1)"><div class="w">
+  <div class="sh"><span class="tag tg">Free tool</span></div>
+  <h2 class="st">SUSI Grant Calculator</h2>
+  <p class="ss">Official 2025/26 thresholds. Adjust sliders and results update instantly.</p>
+  <div class="cg">
+    <div class="cf card">
+      <div class="fg2">
+        <div class="flbl">Course type</div>
+        <div class="togrow"><button class="tog on" id="ug-btn" onclick="cSetYear('ug')">Undergraduate</button><button class="tog" id="pg-btn" onclick="cSetYear('pg')">Postgraduate</button></div>
+      </div>
+      <div class="fg2">
+        <div class="flbl">Household gross income 2025 <span class="v" id="cinc-d">€50,000</span></div>
+        <input type="range" id="cinc" min="0" max="130000" step="500" value="50000" oninput="cUpdate()">
+        <div class="re"><span>€0</span><span>€65k</span><span>€130k</span></div>
+      </div>
+      <div class="fg2">
+        <div class="flbl">Other dependent children <span class="v" id="cdep-d">0</span></div>
+        <div class="pills" id="cdep-pills">
+          <button class="pill on" onclick="cSetDep(0,this)">0</button>
+          <button class="pill" onclick="cSetDep(1,this)">1</button>
+          <button class="pill" onclick="cSetDep(2,this)">2</button>
+          <button class="pill" onclick="cSetDep(3,this)">3</button>
+          <button class="pill" onclick="cSetDep(4,this)">4</button>
+          <button class="pill" onclick="cSetDep(5,this)">5+</button>
+        </div>
+        <p style="font-size:11px;color:var(--mut);margin-top:6px">Each child adds €4,785 to your threshold</p>
+      </div>
+      <div class="fg2">
+        <div class="flbl">Distance from home to college</div>
+        <div class="togrow"><button class="tog on" id="cadj-btn" onclick="cSetDist(false)">Under 30km (adjacent)</button><button class="tog" id="cnadj-btn" onclick="cSetDist(true)">30km+ (non-adjacent)</button></div>
+      </div>
+      <button class="cbtn" onclick="cCalc()">Calculate my grant →</button>
+    </div>
+    <div>
+      <div id="cph" class="cph card">
+        <div style="font-size:42px;margin-bottom:12px">🎓</div>
+        <p style="font-size:14px;color:var(--sub);line-height:1.6">Fill in your details and click <strong style="color:var(--tx)">Calculate</strong> to see your estimated SUSI entitlement for 2025/26</p>
+      </div>
+      <div id="cres" class="crs" style="display:none">
+        <div class="rhero">
+          <div class="rt" id="ctier">Grant tier</div>
+          <div class="rv" id="ctotal">€0</div>
+          <div class="rs" id="ctsub">estimated total value</div>
+        </div>
+        <div class="rmg">
+          <div class="rmi card"><div class="rmil">Maintenance grant</div><div class="rmiv" id="cmaint">€0</div><p style="font-size:10px;color:var(--mut);margin-top:3px">paid over 9 months</p></div>
+          <div class="rmi card"><div class="rmil">Fee grant</div><div class="rmiv" id="cfee" style="font-size:16px;margin-top:4px">—</div><p style="font-size:10px;color:var(--mut);margin-top:3px">paid to college</p></div>
+        </div>
+        <div class="rsteps card">
+          <div class="rst">What to do next</div>
+          <div class="rsi"><div class="rsn">1</div><div class="rst2">Apply at <strong style="color:var(--tx)">susi.ie</strong> before the July priority deadline</div></div>
+          <div class="rsi"><div class="rsn">2</div><div class="rst2">Have household P60 / PAYE statement for 2025 ready</div></div>
+          <div class="rsi"><div class="rsn">3</div><div class="rst2">Confirm your course is on SUSI's approved course list</div></div>
+          <div class="rsi"><div class="rsn">4</div><div class="rst2">Upload documents quickly — processing slows in September</div></div>
+        </div>
+        <div class="dbox">⚠️ Estimate based on 2025/26 thresholds. Always confirm at <a href="https://susi.ie" target="_blank" style="color:var(--gr)">susi.ie</a>.</div>
+      </div>
+    </div>
+  </div>
+</div></section>
+
+<!-- WORK TRACKER -->
+<section id="worktracker"><div class="w">
+  <div class="sh"><span class="tag tgo">Live tool</span></div>
+  <h2 class="st">Part-time Work Tracker</h2>
+  <div style="text-align:center;margin-top:-32px;margin-bottom:36px"><span class="live-dot">Updates in real time as you add earnings</span></div>
+  <p class="ss">Log holiday earnings and see exactly how close you are to the €8,424 SUSI limit in real time.</p>
+  <div class="tg2">
+    <div class="tc card">
+      <div class="tlb">Holiday earnings total</div>
+      <div class="tv" id="ttotal" style="color:var(--gr)">€0</div>
+      <div class="tsb">of €8,424 SUSI limit · <span id="tremain-inline" style="color:var(--gr)">€8,424 remaining</span></div>
+      <div style="margin-bottom:14px">
+        <div class="pb"><div class="pf" id="tbar" style="width:0%;background:var(--gr)"></div></div>
+        <div class="pe"><span>€0</span><span style="color:var(--gd)">⚠ 75% (€6,318)</span><span>€8,424 limit</span></div>
+      </div>
+      <span class="sp sp-s" id="tstatus">🛡️ Safe</span>
+      <div class="ents" id="tents"></div>
+      <div class="ar">
+        <input class="inp" id="tdate" placeholder="Period (e.g. July)">
+        <input class="inp" id="thours" type="number" placeholder="Hours" min="0">
+        <input class="inp" id="trate" type="number" placeholder="€/hr" value="13.50" step="0.50">
+        <button class="ap" onclick="tAdd()">+</button>
+      </div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:12px">
+      <div class="dcard card" style="border-color:rgba(0,232,150,.2)">
+        <div class="dcl">Headroom remaining</div>
+        <div class="dcv" id="tremain" style="color:var(--gr)">€8,424</div>
+        <div class="dcs">before grant is affected</div>
+      </div>
+      <div class="ib" id="tinfo"><p>✅ You're safe. Keep going — plenty of room left this summer.</p></div>
+      <div class="dcard card">
+        <div class="dcl" style="margin-bottom:8px">What counts as holiday earnings?</div>
+        <p style="font-size:13px;color:var(--sub);line-height:1.65">Income earned <strong>outside term time</strong> while you were a student last year. Summer, Christmas, Easter — all count.</p>
+      </div>
+      <div class="dbox">💡 Even €1 over the limit can reduce your grant. If you're close, pause extra shifts.</div>
+    </div>
+  </div>
+</div></section>
+
+<!-- CITY COMPARE -->
+<section id="citycompare" style="background:var(--s1)"><div class="w">
+  <div class="sh"><span class="tag tg">Free tool</span></div>
+  <h2 class="st">City Cost Comparator</h2>
+  <p class="ss">Real monthly costs of student life in each Irish college city. Click cities to compare.</p>
+  <div class="ctabs" id="ctabs"></div>
+  <div class="cc card"><div id="cbars"></div></div>
+</div></section>
+
+<!-- RENT TAX CREDIT -->
+<section id="rentchecker"><div class="w">
+  <div class="sh"><span class="tag tg">Free tool</span></div>
+  <h2 class="st">Rent Tax Credit Checker</h2>
+  <p class="ss">Up to €1,000 back on 2025 rent — find out if you're eligible and exactly how to claim it.</p>
+  <div class="rg">
+    <div class="rform card">
+      <div class="fg2"><div class="flbl">Do you pay private rent in Ireland?</div><div class="togrow"><button class="tog" id="rrent-y" onclick="rSet('rent',true)">Yes</button><button class="tog" id="rrent-n" onclick="rSet('rent',false)">No</button></div></div>
+      <div class="fg2"><div class="flbl">Do you work part-time and pay tax / USC?</div><div class="togrow"><button class="tog" id="rtax-y" onclick="rSet('tax',true)">Yes</button><button class="tog" id="rtax-n" onclick="rSet('tax',false)">No</button></div></div>
+      <div class="fg2" id="ramt-wrap" style="display:none">
+        <div class="flbl">Monthly rent <span class="v" id="ramt-d">€600</span></div>
+        <input type="range" id="ramt" min="100" max="2000" step="50" value="600" oninput="rUpdate()">
+        <div class="re"><span>€100</span><span>€1,050</span><span>€2,000</span></div>
+      </div>
+      <button class="cbtn" style="margin-top:4px" onclick="rCheck()">Check my eligibility →</button>
+    </div>
+    <div>
+      <div id="rprompt" class="cph card" style="display:flex;align-items:center;justify-content:center;flex-direction:column;gap:10px">
+        <div style="font-size:38px">🏠</div>
+        <p style="font-size:14px;color:var(--sub);text-align:center;line-height:1.6">Answer the questions and click <strong style="color:var(--tx)">Check</strong> to see your eligibility</p>
+      </div>
+      <div id="rres" class="rres" style="display:none">
+        <div id="rresult-main" class="dcard card"></div>
+        <div class="rsteps card">
+          <div class="rst">How to claim on Revenue myAccount</div>
+          <div class="rsi"><div class="rsn">1</div><div class="rst2">Go to <strong style="color:var(--tx)">revenue.ie</strong> → myAccount → Manage your tax</div></div>
+          <div class="rsi"><div class="rsn">2</div><div class="rst2">"Add a credit" → "Rent Tax Credit" → Tax year 2025</div></div>
+          <div class="rsi"><div class="rsn">3</div><div class="rst2">Enter rent amount, landlord name, address, RTB number</div></div>
+          <div class="rsi"><div class="rsn">4</div><div class="rst2">Submit — Revenue processes within 5–10 working days</div></div>
+        </div>
+        <div class="dbox">💡 <strong style="color:var(--tx)">Tell your parents:</strong> If they pay your student rent, they can each claim €1,000 too — up to €2,000 for the household!</div>
+      </div>
+    </div>
+  </div>
+</div></section>
+
+<!-- INTERNATIONAL -->
+<section id="international" style="background:var(--s1)"><div class="w">
+  <div class="sh"><span class="tag tgb">International students</span></div>
+  <h2 class="st">International Student Hub</h2>
+  <p class="ss">Everything non-EU students need about money, work, and finance in Ireland.</p>
+  <div class="ig">
+    <div class="ic card reveal"><div class="ic-i">🛂</div><div class="ic-t">SUSI Eligibility</div><ul class="ic-l"><li>Resident in Ireland/EU/EEA/UK for 3 of the last 5 years? You may qualify</li><li>Refugee status or certain immigration permissions also qualify</li><li>EU/EEA only residency = fee grant only, not maintenance</li><li>Nationality alone doesn't decide — residency history does</li></ul></div>
+    <div class="ic card reveal d1"><div class="ic-i">⏰</div><div class="ic-t">Work Hours (non-EEA)</div><ul class="ic-l"><li>Term time: maximum <strong style="color:var(--tx)">20 hours per week</strong> on student visa</li><li>Academic holidays: full-time work permitted</li><li>Exceeding 20hrs risks your visa — track with our Work Tracker</li><li>EU/EEA students have no work hour restrictions</li></ul></div>
+    <div class="ic card reveal"><div class="ic-i">💶</div><div class="ic-t">Visa Funds Requirement</div><ul class="ic-l"><li>Must show <strong style="color:var(--tx)">€10,000</strong> accessible in your bank at visa application</li><li>Must be actual funds — not a letter of support</li><li>Keep 3–6 months of bank statements as evidence</li><li>Separate from course fees — you need both</li></ul></div>
+    <div class="ic card reveal d1"><div class="ic-i">🏦</div><div class="ic-t">Banking in Ireland</div><ul class="ic-l"><li><strong style="color:var(--tx)">Revolut</strong> — instant setup, best for international transfers</li><li><strong style="color:var(--tx)">N26</strong> — free EU account, no foreign transaction fees</li><li><strong style="color:var(--tx)">Bank of Ireland</strong> — free student account, widely accepted</li><li>Get your PPS number first — needed to work or open accounts</li></ul></div>
+    <div class="ic card reveal"><div class="ic-i">🎓</div><div class="ic-t">Scholarships</div><ul class="ic-l"><li>Govt of Ireland: €25,000/yr + €5,750 fees + research costs</li><li>TCD, UCD, DCU all have country-specific undergraduate awards</li><li>Many have Oct/Nov deadlines for the following academic year</li><li>Check your university's international office — many go unclaimed</li></ul></div>
+    <div class="ic card reveal d1"><div class="ic-i">💸</div><div class="ic-t">Irish Tax</div><ul class="ic-l"><li>Get your PPS number at mywelfare.ie or local Intreo office</li><li>Working? Same tax credits as Irish students — claim them</li><li>Started or finished mid-year? You're likely owed a refund</li><li>Claim via Revenue myAccount at revenue.ie — free to use</li></ul></div>
+  </div>
+</div></section>
+
+<!-- DISCOUNTS -->
+<section id="discounts"><div class="w">
+  <div class="sh"><span class="tag tgo">Save money daily</span></div>
+  <h2 class="st">Student Discount Hub</h2>
+  <p class="ss">Ireland-specific deals updated monthly. These add up to hundreds saved every year.</p>
+  <div class="dg">
+    <div class="dc card reveal"><div class="dc-c">Transport</div><div class="dc-n">Student Leap Card</div><div class="dc-s">Up to 50% off</div><div class="dc-d">Dublin Bus, Luas, DART, intercity rail</div></div>
+    <div class="dc card reveal d1"><div class="dc-c">Music</div><div class="dc-n">Spotify Student</div><div class="dc-s">€5.99/month</div><div class="dc-d">Half price with valid college email</div></div>
+    <div class="dc card reveal d2"><div class="dc-c">Software</div><div class="dc-n">Microsoft 365</div><div class="dc-s">Free</div><div class="dc-d">Word, Excel, Teams via your college IT portal</div></div>
+    <div class="dc card reveal d3"><div class="dc-c">Design</div><div class="dc-n">Adobe Creative Cloud</div><div class="dc-s">~60% off</div><div class="dc-d">Student pricing on full Creative Cloud suite</div></div>
+    <div class="dc card reveal d4"><div class="dc-c">Banking</div><div class="dc-n">BOI Student Account</div><div class="dc-s">Zero fees</div><div class="dc-d">Free current account while studying</div></div>
+    <div class="dc card reveal d5"><div class="dc-c">Food</div><div class="dc-n">Lidl / Aldi switch</div><div class="dc-s">Save €80+/mo</div><div class="dc-d">Switch from Tesco/Supervalu and save</div></div>
+    <div class="dc card reveal"><div class="dc-c">Tech</div><div class="dc-n">Apple Education</div><div class="dc-s">Up to €200 off</div><div class="dc-d">MacBook and iPad via Apple Education Store</div></div>
+    <div class="dc card reveal d1"><div class="dc-c">Entertainment</div><div class="dc-n">YouTube Premium</div><div class="dc-s">€3.99/month</div><div class="dc-d">Ad-free YouTube at student rate</div></div>
+    <div class="dc card reveal d2"><div class="dc-c">Travel</div><div class="dc-n">ISIC Card</div><div class="dc-s">Thousands of deals</div><div class="dc-d">International student card — 130+ countries</div></div>
+  </div>
+</div></section>
+
+<!-- TESTIMONIALS -->
+<section style="background:var(--s1)"><div class="w">
+  <div class="sh"><span class="tag tg">Beta users</span></div>
+  <h2 class="st">Students already saving</h2>
+  <div class="rating-bar">
+    <span class="rating-stars">★★★★★</span>
+    <span class="rating-txt">4.9 out of 5 · <strong style="color:var(--tx)">127 beta users</strong></span>
+  </div>
+  <div class="testg">
+    <div class="testc card reveal">
+      <div class="testt"><div><div class="testn">Aoife M.</div><div class="testco">TCD · 2nd year Law</div></div>
+        <svg width="54" height="54" viewBox="0 0 54 54"><circle cx="27" cy="27" r="21" fill="none" stroke="var(--bd2)" stroke-width="4"/><circle cx="27" cy="27" r="21" fill="none" stroke="var(--gr)" stroke-width="4" stroke-dasharray="132" stroke-dashoffset="23.8" stroke-linecap="round" style="transform:rotate(-90deg);transform-origin:50% 50%"/><text x="27" y="31" text-anchor="middle" fill="var(--gr)" font-size="12" font-weight="700" font-family="Syne,sans-serif">81</text></svg>
+      </div>
+      <p class="testq">"I didn't know I could get €3,200 in SUSI until I used this. Total game changer."</p>
+      <div class="stars">★★★★★</div>
+    </div>
+    <div class="testc card reveal d1">
+      <div class="testt"><div><div class="testn">Rahul K.</div><div class="testco">DCU · International · CS</div></div>
+        <svg width="54" height="54" viewBox="0 0 54 54"><circle cx="27" cy="27" r="21" fill="none" stroke="var(--bd2)" stroke-width="4"/><circle cx="27" cy="27" r="21" fill="none" stroke="var(--gr)" stroke-width="4" stroke-dasharray="132" stroke-dashoffset="34.3" stroke-linecap="round" style="transform:rotate(-90deg);transform-origin:50% 50%"/><text x="27" y="31" text-anchor="middle" fill="var(--gr)" font-size="12" font-weight="700" font-family="Syne,sans-serif">74</text></svg>
+      </div>
+      <p class="testq">"Finally something that explains Irish tax for international students. I claimed €400 back."</p>
+      <div class="stars">★★★★★</div>
+    </div>
+    <div class="testc card reveal d2">
+      <div class="testt"><div><div class="testn">Ciarán B.</div><div class="testco">UCC · 3rd year Engineering</div></div>
+        <svg width="54" height="54" viewBox="0 0 54 54"><circle cx="27" cy="27" r="21" fill="none" stroke="var(--bd2)" stroke-width="4"/><circle cx="27" cy="27" r="21" fill="none" stroke="var(--gr)" stroke-width="4" stroke-dasharray="132" stroke-dashoffset="15.8" stroke-linecap="round" style="transform:rotate(-90deg);transform-origin:50% 50%"/><text x="27" y="31" text-anchor="middle" fill="var(--gr)" font-size="12" font-weight="700" font-family="Syne,sans-serif">88</text></svg>
+      </div>
+      <p class="testq">"The work tracker saved my grant. I was €200 away from losing it and had zero idea."</p>
+      <div class="stars">★★★★★</div>
+    </div>
+  </div>
+</div></section>
+
+<!-- PRICING -->
+<section id="pricing"><div class="w">
+  <div class="sh"><span class="tag tg">Simple pricing</span></div>
+  <h2 class="st">Pays for itself instantly</h2>
+  <p class="ss">Free forever for basics. Pro pays for itself the moment you claim your first credit.</p>
+  <div class="prg">
+    <div class="prc card">
+      <div><div class="pn">Free</div><div class="pd">For every Irish student</div></div>
+      <div style="display:flex;align-items:baseline;gap:4px"><span class="pa gr">€0</span><span class="pp">/month</span></div>
+      <ul class="pf2"><li>SUSI eligibility checker</li><li>Rent Tax Credit checker</li><li>Money Score quiz</li><li>City cost comparator</li><li>Part-time earnings limit tool</li></ul>
+      <button class="btn btn-o" style="width:100%;justify-content:center" onclick="openDash(event)">Get started free</button>
+    </div>
+    <div class="prc hot card" style="position:relative">
+      <div class="pb2">Best value</div>
+      <div class="most-pop">⚡ Most popular</div>
+      <div><div class="pn">Pro</div><div class="pd">For serious students</div></div>
+      <div><div style="display:flex;align-items:baseline;gap:4px"><span class="pa">€4.99</span><span class="pp">/month</span></div><div class="pan">or €29.99/year — <strong>save €30</strong></div></div>
+      <ul class="pf2"><li>Everything in Free</li><li>Full SUSI grant breakdown + appeal guide</li><li>Part-time work protector (live €8,424 tracker)</li><li>Deadline alerts by email</li><li>International student hub</li><li>Full budget tracker (saved)</li><li>Student discount hub</li><li>Priority support</li></ul>
+      <button class="btn btn-g" style="width:100%;justify-content:center" onclick="openDash(event)">Start Pro — €4.99/mo →</button>
+    </div>
+  </div>
+  <p style="text-align:center;font-size:12px;color:var(--mut);margin-top:16px">Pro pays for itself if you claim even one tax credit. Cancel anytime.</p>
+</div></section>
+
+<!-- FAQ -->
+<section style="background:var(--s1)"><div class="w">
+  <div class="sh"><span class="tag tgm">FAQ</span></div>
+  <h2 class="st">Common questions</h2>
+  <p class="ss">Answers to what students ask most.</p>
+  <div class="faqlist">
+    <div class="faqi"><div class="faqq" onclick="faqT(this)"><span>Is StudentCent affiliated with SUSI or Revenue?</span><span class="faqa2">▾</span></div><div class="faqans">No. StudentCent is independent. Always verify final figures at susi.ie or revenue.ie.</div></div>
+    <div class="faqi"><div class="faqq" onclick="faqT(this)"><span>How accurate is the SUSI calculator?</span><span class="faqa2">▾</span></div><div class="faqans">Very accurate — we use the published 2025/26 thresholds directly from SUSI. Use it as a strong estimate then confirm on susi.ie.</div></div>
+    <div class="faqi"><div class="faqq" onclick="faqT(this)"><span>Can international students use StudentCent?</span><span class="faqa2">▾</span></div><div class="faqans">Yes — we have a dedicated hub covering SUSI eligibility for non-EU students, work permit hours, visa funds, Irish tax, and scholarships.</div></div>
+    <div class="faqi"><div class="faqq" onclick="faqT(this)"><span>What is the SUSI holiday earnings limit?</span><span class="faqa2">▾</span></div><div class="faqans">SUSI allows students to earn up to €8,424 outside term time. Go over by even €1 and your grant can be cut. Our Work Tracker keeps you safe.</div></div>
+    <div class="faqi"><div class="faqq" onclick="faqT(this)"><span>Can my parents claim the rent tax credit too?</span><span class="faqa2">▾</span></div><div class="faqans">Yes! If your parents pay your student rent they can each claim €1,000 — up to €2,000 for the household. Tell them!</div></div>
+    <div class="faqi"><div class="faqq" onclick="faqT(this)"><span>Is Pro worth it?</span><span class="faqa2">▾</span></div><div class="faqans">Pro is €4.99/month. If the rent tax credit alone puts €1,000 in your pocket, the yearly plan pays for itself 33x over. Most students recover the cost in the first week.</div></div>
+  </div>
+</div></section>
+
+<!-- CTA -->
+<section id="cta"><div class="w">
+  <div class="ctain">
+    <div class="ctaico">🎓</div>
+    <h2 class="st" style="margin-bottom:12px">Ready to find your money?</h2>
+    <p style="font-size:17px;color:var(--sub);margin-bottom:26px;line-height:1.65">Takes 60 seconds. Free to start. Works for Irish and international students.</p>
+    <button class="btn btn-g" style="font-size:15px;padding:14px 30px;margin:0 auto" onclick="openDash(event)">Get started free →</button>
+      <div style="display:flex;align-items:center;justify-content:center;gap:8px;margin-top:18px">
+        <div style="display:flex">
+          <div style="width:26px;height:26px;border-radius:50%;background:var(--s3);border:2px solid var(--bg);display:flex;align-items:center;justify-content:center;font-size:13px;margin-left:-6px">👩</div>
+          <div style="width:26px;height:26px;border-radius:50%;background:var(--s2);border:2px solid var(--bg);display:flex;align-items:center;justify-content:center;font-size:13px;margin-left:-6px">👨</div>
+          <div style="width:26px;height:26px;border-radius:50%;background:var(--s3);border:2px solid var(--bg);display:flex;align-items:center;justify-content:center;font-size:13px;margin-left:-6px">👩</div>
+          <div style="width:26px;height:26px;border-radius:50%;background:var(--s2);border:2px solid var(--bg);display:flex;align-items:center;justify-content:center;font-size:13px;margin-left:-6px">🧑</div>
+        </div>
+        <span style="font-size:12px;color:var(--sub)"><strong style="color:var(--tx)">127 students</strong> joined this month</span>
+      </div>
+  </div>
+</div></section>
+
+<!-- FOOTER -->
+<footer><div class="w">
+  <div class="fi">
+    <a href="#" class="nlogo"><div class="nmark">€</div><span class="nname">StudentCent.ie</span></a>
+    <p class="fn">Independent student finance tool. Not affiliated with SUSI or Revenue. Always verify on official sources.</p>
+    <div class="flinks"><a href="#">Privacy</a><a href="#">Terms</a><a href="mailto:hello@studentcent.ie">Contact</a></div>
+  </div>
+</div></footer>
+
+<!-- ══════════════ DASHBOARD ══════════════ -->
+<div id="dash">
+  <button class="dclose" onclick="closeDash()">✕</button>
+  <div class="dside">
+    <div class="dlw"><a href="#" class="nlogo" onclick="closeDash()"><div class="nmark">€</div><span class="nname">StudentCent</span></a></div>
+    <nav class="dnav">
+      <button class="db on" onclick="dShow('overview')"><span class="dbico">📊</span>Overview</button>
+      <button class="db" onclick="dShow('susi')"><span class="dbico">🧮</span>SUSI Calculator</button>
+      <button class="db" onclick="dShow('rent')"><span class="dbico">🏠</span>Rent Tax Credit</button>
+      <button class="db" onclick="dShow('work')"><span class="dbico">🛡️</span>Work Tracker<span class="dpro">Pro</span></button>
+      <button class="db" onclick="dShow('budget')"><span class="dbico">💰</span>Budget<span class="dpro">Pro</span></button>
+      <button class="db" onclick="dShow('intl')"><span class="dbico">🌍</span>International<span class="dpro">Pro</span></button>
+      <button class="db" onclick="dShow('disc')"><span class="dbico">🎁</span>Discounts<span class="dpro">Pro</span></button>
+    </nav>
+    <div class="dfoot">
+      <div class="dup"><div class="dut">⚡ Upgrade to Pro</div><div class="dus">All tools for €4.99/mo</div><button class="dub">Upgrade now</button></div>
+      <button class="dbk" onclick="closeDash()">← Back to site</button>
+    </div>
+  </div>
+  <div class="dmain">
+    <div class="dp on" id="dp-overview">
+      <div><div class="dpt">Dashboard</div><div class="dps">Welcome back 👋</div></div>
+      <div class="d3">
+        <div class="dcard card"><div class="dcl">Money Score</div><div class="dcv" style="color:var(--gd)">47<span style="font-size:15px;color:var(--mut)">/100</span></div><div class="dcs">Grant Getter — complete tools to improve</div></div>
+        <div class="dcard card" style="border-color:rgba(0,232,150,.2)"><div class="dcl">Money identified</div><div class="dcv" style="color:var(--gr)">€1,340</div><div class="dcs">grants, credits &amp; refunds</div></div>
+        <div class="dcard card"><div class="dcl">Work earnings</div><div class="dcv" style="color:var(--gr);font-size:22px">€0<span style="font-size:13px;color:var(--mut)"> / €8,424</span></div><div class="dcs">Safe — room to earn more</div></div>
+      </div>
+      <div><p style="font-size:13px;font-weight:700;color:var(--tx);margin-bottom:9px;font-family:var(--fd)">Action items</p>
+        <div style="display:flex;flex-direction:column;gap:7px">
+          <div class="acard" onclick="dShow('susi')"><div class="aico" style="background:rgba(245,200,66,.1)">🧮</div><div><div class="ati">SUSI Calculator</div><div class="ava" style="color:var(--gd)">Up to €3,200 — check now</div></div><span class="aar">›</span></div>
+          <div class="acard" onclick="dShow('rent')"><div class="aico" style="background:rgba(255,90,90,.1)">🏠</div><div><div class="ati">Rent Tax Credit</div><div class="ava" style="color:var(--rd)">€1,000 pending — check eligibility</div></div><span class="aar">›</span></div>
+          <div class="acard" onclick="dShow('work')"><div class="aico" style="background:rgba(0,232,150,.1)">🛡️</div><div><div class="ati">Work Tracker</div><div class="ava" style="color:var(--gr)">€0 of €8,424 — all good</div></div><span class="aar">›</span></div>
+        </div>
+      </div>
+      <div class="dcard card" style="border-color:rgba(0,232,150,.15)">
+        <p style="font-size:11px;font-weight:700;color:var(--sub);text-transform:uppercase;letter-spacing:.06em;margin-bottom:11px;font-family:var(--fd)">📅 Upcoming deadlines</p>
+        <div class="dli"><span class="dlic">⚠️</span><div><div class="dlt">SUSI 2026/27 priority deadline</div><div class="dld" style="color:var(--gd)">Late July 2026 — apply now</div></div></div>
+        <div class="dli"><span class="dlic">🕐</span><div><div class="dlt">Rent tax credit claim (2025)</div><div class="dld" style="color:var(--mut)">31 October 2026</div></div></div>
+        <div class="dli"><span class="dlic">🕐</span><div><div class="dlt">College registration opens</div><div class="dld" style="color:var(--mut)">August 2026</div></div></div>
+      </div>
+    </div>
+    <div class="dp" id="dp-susi">
+      <div><div class="dpt">SUSI Calculator</div><div class="dps">2025/26 official thresholds. Updates live.</div></div>
+      <div class="cf card" style="max-width:540px">
+        <div class="fg2"><div class="flbl">Household gross income 2025 <span class="v" id="dinc-d">€50,000</span></div><input type="range" id="dinc" min="0" max="130000" step="500" value="50000" oninput="dCalcU()"><div class="re"><span>€0</span><span>€65k</span><span>€130k</span></div></div>
+        <div class="fg2"><div class="flbl">Dependent children <span class="v" id="ddep-d">0</span></div>
+          <div class="pills" id="ddep">
+            <button class="pill on" onclick="dSetDep(0,this)">0</button>
+            <button class="pill" onclick="dSetDep(1,this)">1</button>
+            <button class="pill" onclick="dSetDep(2,this)">2</button>
+            <button class="pill" onclick="dSetDep(3,this)">3</button>
+            <button class="pill" onclick="dSetDep(4,this)">4</button>
+          </div>
+        </div>
+        <div class="fg2"><div class="flbl">Distance</div><div class="togrow"><button class="tog on" id="dadj" onclick="dSetDist(false)">Under 30km</button><button class="tog" id="dnadj" onclick="dSetDist(true)">30km+</button></div></div>
+        <button class="cbtn" onclick="dCalc()">Calculate →</button>
+      </div>
+      <div id="dres" style="display:none;flex-direction:column;gap:10px">
+        <div class="d3">
+          <div class="dcard card" style="border-color:rgba(0,232,150,.2)"><div class="dcl">Maintenance</div><div class="dcv" id="dmaint" style="color:var(--gr)">€0</div><div class="dcs">over 9 months</div></div>
+          <div class="dcard card"><div class="dcl">Fee grant</div><div class="dcv" id="dfee" style="color:var(--gr);font-size:18px;margin-top:5px">—</div></div>
+          <div class="dcard card" style="border-color:rgba(0,232,150,.2)"><div class="dcl">Total value</div><div class="dcv" id="dtotal" style="color:var(--gr)">€0</div></div>
+        </div>
+        <div class="dbox" id="dtier"></div>
+      </div>
+    </div>
+    <div class="dp" id="dp-rent">
+      <div><div class="dpt">Rent Tax Credit</div><div class="dps">Up to €1,000 back on 2025 rent.</div></div>
+      <div class="cf card" style="max-width:540px">
+        <div class="fg2"><div class="flbl">Do you pay private rent in Ireland?</div><div class="togrow"><button class="tog" id="drrent-y" onclick="drSet('rent',true)">Yes</button><button class="tog" id="drrent-n" onclick="drSet('rent',false)">No</button></div></div>
+        <div class="fg2"><div class="flbl">Do you pay income tax / USC?</div><div class="togrow"><button class="tog" id="drtax-y" onclick="drSet('tax',true)">Yes</button><button class="tog" id="drtax-n" onclick="drSet('tax',false)">No</button></div></div>
+        <div id="drslider" style="display:none" class="fg2"><div class="flbl">Monthly rent <span class="v" id="dramt-d">€600</span></div><input type="range" id="dramt" min="100" max="2000" step="50" value="600" oninput="drUpdate()"><div class="re"><span>€100</span><span>€2,000</span></div></div>
+        <button class="cbtn" onclick="drCheck()">Check eligibility →</button>
+      </div>
+      <div id="drres" style="display:none;flex-direction:column;gap:10px">
+        <div id="drresult" class="dcard card"></div>
+        <div class="rsteps card"><div class="rst">How to claim on Revenue myAccount</div><div class="rsi"><div class="rsn">1</div><div class="rst2">revenue.ie → myAccount → Manage your tax</div></div><div class="rsi"><div class="rsn">2</div><div class="rst2">"Add a credit" → "Rent Tax Credit" → 2025</div></div><div class="rsi"><div class="rsn">3</div><div class="rst2">Enter rent amount, landlord name, RTB number</div></div><div class="rsi"><div class="rsn">4</div><div class="rst2">Submit — processed within 5–10 working days</div></div></div>
+        <div class="dbox">💡 Parents paying student rent can also claim €1,000 each!</div>
+      </div>
+    </div>
+    <div class="dp" id="dp-work">
+      <div><div class="dpt">Work Tracker</div><div class="dps">Track holiday earnings against the SUSI €8,424 limit.</div></div>
+      <div class="tg2" style="gap:20px">
+        <div class="tc card">
+          <div class="tlb">Holiday earnings</div>
+          <div class="tv" id="dwtotal" style="color:var(--gr)">€0</div>
+          <div class="tsb">of €8,424 limit</div>
+          <div style="margin-bottom:12px"><div class="pb"><div class="pf" id="dwbar" style="width:0%;background:var(--gr)"></div></div><div class="pe"><span>€0</span><span style="color:var(--gd)">75% warning</span><span>€8,424</span></div></div>
+          <span class="sp sp-s" id="dwstatus">🛡️ Safe</span>
+          <div class="ents" id="dwents"></div>
+          <div class="ar"><input class="inp" id="dwdate" placeholder="Period"><input class="inp" id="dwhours" type="number" placeholder="Hours"><input class="inp" id="dwrate" type="number" placeholder="€/hr" value="13.50"><button class="ap" onclick="dwAdd()">+</button></div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <div class="dcard card" style="border-color:rgba(0,232,150,.2)"><div class="dcl">Remaining</div><div class="dcv" id="dwremain" style="color:var(--gr)">€8,424</div><div class="dcs">before grant affected</div></div>
+          <div class="dbox">Holiday earnings = income outside term time. Summer, Christmas, Easter all count.</div>
+        </div>
+      </div>
+    </div>
+    <div class="dp" id="dp-budget">
+      <div><div class="dpt">Budget Tracker</div><div class="dps">See exactly where your money goes.</div></div>
+      <div class="d3">
+        <div class="dcard card"><div class="dcl">Monthly income</div><input type="number" id="binc" value="800" oninput="bRender()" style="background:transparent;border:none;font-family:'Syne',sans-serif;font-size:32px;color:var(--gr);outline:none;width:100%;margin-top:5px"></div>
+        <div class="dcard card"><div class="dcl">Total spending</div><div class="dcv" id="btotal" style="color:var(--rd)">€0</div></div>
+        <div class="dcard card" id="bsurpc"><div class="dcl">Surplus / Deficit</div><div class="dcv" id="bsurp">€0</div></div>
+      </div>
+      <div class="dcard card" style="padding:22px">
+        <div id="bbars" style="margin-bottom:14px"></div>
+        <div id="bitems"></div>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr auto;gap:5px;margin-top:10px;padding-top:12px;border-top:1px solid var(--bd)">
+          <input class="inp" id="bilbl" placeholder="Label">
+          <select id="bicat" class="inp"><option>Rent</option><option>Food</option><option>Transport</option><option>Social</option><option>Subscriptions</option><option>College fees</option><option>Other</option></select>
+          <input class="inp" id="biamt" type="number" placeholder="€ amount">
+          <button class="ap" style="width:100%" onclick="bAdd()">+</button>
+        </div>
+      </div>
+    </div>
+    <div class="dp" id="dp-intl">
+      <div><div class="dpt">International Hub</div><div class="dps">Finance essentials for international students.</div></div>
+      <div class="ig">
+        <div class="ic card"><div class="ic-i">🛂</div><div class="ic-t">SUSI Eligibility</div><ul class="ic-l"><li>3 of last 5 years resident in Ireland/EU/EEA/UK</li><li>Refugee status or immigration permissions qualify</li><li>EU/EEA only = fee grant, not maintenance</li></ul></div>
+        <div class="ic card"><div class="ic-i">⏰</div><div class="ic-t">Work Hours (non-EEA)</div><ul class="ic-l"><li>Term time: max <strong style="color:var(--tx)">20hrs/week</strong> on student visa</li><li>Academic holidays: full-time permitted</li><li>Exceeding risks your visa</li></ul></div>
+        <div class="ic card"><div class="ic-i">💶</div><div class="ic-t">Visa Funds</div><ul class="ic-l"><li>Must show €10,000 in bank at visa application</li><li>Actual funds — not a letter of support</li><li>Keep 3–6 months of bank statements</li></ul></div>
+        <div class="ic card"><div class="ic-i">🎓</div><div class="ic-t">Scholarships</div><ul class="ic-l"><li>Govt of Ireland: €25,000/yr + fees + research</li><li>TCD, UCD, DCU country-specific awards</li><li>Many Oct/Nov deadlines — check early</li></ul></div>
+      </div>
+    </div>
+    <div class="dp" id="dp-disc">
+      <div><div class="dpt">Student Discounts</div><div class="dps">Ireland-specific deals updated monthly.</div></div>
+      <div class="dg">
+        <div class="dc card"><div class="dc-c">Transport</div><div class="dc-n">Student Leap Card</div><div class="dc-s">Up to 50% off</div><div class="dc-d">Bus, Luas, DART, intercity rail</div></div>
+        <div class="dc card"><div class="dc-c">Music</div><div class="dc-n">Spotify Student</div><div class="dc-s">€5.99/month</div><div class="dc-d">Half price with college email</div></div>
+        <div class="dc card"><div class="dc-c">Software</div><div class="dc-n">Microsoft 365</div><div class="dc-s">Free</div><div class="dc-d">Via your college IT portal</div></div>
+        <div class="dc card"><div class="dc-c">Banking</div><div class="dc-n">BOI Student Account</div><div class="dc-s">Zero fees</div><div class="dc-d">Free current account while studying</div></div>
+        <div class="dc card"><div class="dc-c">Tech</div><div class="dc-n">Apple Education</div><div class="dc-s">Up to €200 off</div><div class="dc-d">MacBook and iPad discounts</div></div>
+        <div class="dc card"><div class="dc-c">Design</div><div class="dc-n">Adobe Creative</div><div class="dc-s">~60% off</div><div class="dc-d">Student pricing on Creative Cloud</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+'use strict';
+
+// ── NAV SCROLL
+window.addEventListener('scroll',()=>document.getElementById('nav').classList.toggle('sc',scrollY>30),{passive:true})
+
+// ── SCROLL REVEAL
+const ro=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('up')})},{threshold:.12})
+document.querySelectorAll('.reveal').forEach(el=>ro.observe(el))
+
+// ── COUNTER ANIMATION
+const co=new IntersectionObserver(es=>{
+  es.forEach(e=>{
+    if(!e.isIntersecting)return
+    co.unobserve(e.target)
+    const el=e.target,end=+el.dataset.target,pre=el.dataset.pre||'',suf=el.dataset.suf||''
+    const t0=performance.now()
+    const tick=t=>{
+      const p=Math.min((t-t0)/2000,1),ease=1-Math.pow(1-p,3)
+      el.textContent=pre+Math.floor(ease*end).toLocaleString()+suf
+      if(p<1)requestAnimationFrame(tick)
+    }
+    requestAnimationFrame(tick)
+  })
+},{threshold:.5})
+document.querySelectorAll('[data-target]').forEach(el=>co.observe(el))
+
+// ── QUIZ
+const QS=[
+  {q:"Are you an Irish/EU student or international?",opts:["Irish / EU","International (non-EU)"]},
+  {q:"What year of college are you in?",opts:["Starting 1st year","2nd year","3rd year","4th year / Postgrad"]},
+  {q:"Do you pay rent away from home?",opts:["Yes — I rent","No — I live at home"]},
+  {q:"Do you work part-time during college?",opts:["Yes","No / Planning to"]},
+  {q:"Have you ever applied for a SUSI grant?",opts:["Yes, got it","Applied, unsure","Never applied","Not eligible"]},
+]
+let qStep=0,qAns=[]
+function qRender(){
+  document.querySelectorAll('.qpd').forEach((d,i)=>{
+    d.style.background=i<=qStep?'var(--gr)':'var(--bd2)'
+  })
+  document.getElementById('qq').textContent=QS[qStep].q
+  const wrap=document.getElementById('qopts');wrap.innerHTML=''
+  QS[qStep].opts.forEach(o=>{
+    const b=document.createElement('button')
+    b.style.cssText='background:var(--s1);border:1px solid var(--bd);border-radius:8px;padding:10px 13px;font-size:13px;color:var(--sub);cursor:pointer;transition:all .2s;text-align:left;font-family:var(--fb);font-weight:500;width:100%'
+    b.textContent=o
+    b.onmouseover=()=>{b.style.borderColor='var(--gr)';b.style.color='var(--tx)'}
+    b.onmouseout=()=>{b.style.borderColor='var(--bd)';b.style.color='var(--sub)'}
+    b.onclick=()=>qPick(o)
+    wrap.appendChild(b)
+  })
+  document.getElementById('qstep').textContent='Question '+(qStep+1)+' of '+QS.length
+}
+function qPick(o){
+  qAns.push(o)
+  if(qStep<QS.length-1){qStep++;qRender()}else qResult()
+}
+function qResult(){
+  document.getElementById('qbody').style.display='none'
+  document.getElementById('qres').style.display='block'
+  let score=25,items=[]
+  if(qAns[0]==='Irish / EU')score+=12
+  if(qAns[2]==='Yes — I rent'){score+=12;items.push(['Rent Tax Credit','€1,000'])}
+  if(qAns[3]==='Yes'){score+=8;items.push(['Tax refund (PAYE)','€400+'])}
+  if(qAns[4]==='Yes, got it')score+=30
+  else if(qAns[4]==='Applied, unsure'){score+=10;items.push(['SUSI Grant','up to €3,200'])}
+  else if(qAns[4]==='Never applied')items.push(['SUSI Grant','up to €3,200'])
+  score=Math.min(score,97)
+  const total=items.reduce((s,i)=>{const n=parseInt(i[1].replace(/[^0-9]/g,''));return s+(isNaN(n)?400:n)},0)
+  const C=2*Math.PI*45,circ=document.getElementById('qcirc')
+  const col=score>=70?'var(--gr)':score>=40?'var(--gd)':'var(--rd)'
+  circ.style.stroke=col
+  setTimeout(()=>{circ.style.strokeDashoffset=C-(score/100)*C;document.getElementById('qnum').textContent=score},80)
+  document.getElementById('qnum').style.fill=col
+  const lbl=score>=70?'Finance Pro':score>=40?'Grant Getter':'Budget Beginner'
+  const pill=document.getElementById('qpill')
+  pill.textContent=lbl;pill.style.color=col;pill.style.borderColor=col+'40'
+  document.getElementById('qtotal').textContent='€'+total.toLocaleString()
+  const bd=document.getElementById('qbd')
+  bd.innerHTML=items.map(([k,v])=>`<div style="display:flex;justify-content:space-between;font-size:12px;padding:6px 9px;background:var(--s1);border-radius:7px"><span style="color:var(--sub)">${k}</span><span style="color:var(--gr);font-weight:700">${v}</span></div>`).join('')
+}
+function quizReset(){qStep=0;qAns=[];document.getElementById('qbody').style.display='';document.getElementById('qres').style.display='none';qRender()}
+qRender()
+
+// ── SUSI TIERS
+const TIERS=[
+  {limit:27400,adj:3458,non:6594,fee:'Full fees paid',fv:3000,lbl:'Special rate'},
+  {limit:46790,adj:3458,non:6594,fee:'Full fees paid',fv:3000,lbl:'Full rate'},
+  {limit:53025,adj:2592,non:4949,fee:'Partial fee grant',fv:1500,lbl:'75% rate'},
+  {limit:58265,adj:1726,non:3298,fee:'Partial fee grant',fv:1500,lbl:'50% rate'},
+  {limit:63210,adj:863, non:1649,fee:'€500 contribution',fv:500, lbl:'25% rate'},
+  {limit:100000,adj:0, non:0,   fee:'€500 contribution',fv:500, lbl:'Contribution only'},
+  {limit:999999,adj:0, non:0,   fee:'No grant',fv:0,lbl:'Above threshold'},
+]
+const DEP=4785
+function getTier(inc,deps,dist){
+  const adj=inc-deps*DEP
+  const t=TIERS.find(x=>adj<=x.limit)
+  const maint=dist?t.non:t.adj
+  return{t,maint,total:maint+t.fv,adj}
+}
+
+// ── LANDING CALC
+let cDeps=0,cDist=false,cShown=false
+function cSetYear(y){
+  document.getElementById('ug-btn').classList.toggle('on',y==='ug')
+  document.getElementById('pg-btn').classList.toggle('on',y!=='ug')
+  if(cShown)cCalc()
+}
+function cSetDep(n,btn){
+  cDeps=n
+  document.querySelectorAll('#cdep-pills .pill').forEach((p,i)=>p.classList.toggle('on',i===n))
+  document.getElementById('cdep-d').textContent=n
+  if(cShown)cCalc()
+}
+function cSetDist(v){
+  cDist=v
+  document.getElementById('cadj-btn').classList.toggle('on',!v)
+  document.getElementById('cnadj-btn').classList.toggle('on',v)
+  if(cShown)cCalc()
+}
+function cUpdate(){
+  document.getElementById('cinc-d').textContent='€'+(+document.getElementById('cinc').value).toLocaleString()
+  if(cShown)cCalc()
+}
+function cCalc(){
+  const inc=+document.getElementById('cinc').value
+  const{t,maint,total,adj}=getTier(inc,cDeps,cDist)
+  document.getElementById('ctier').textContent=t.lbl
+  document.getElementById('ctotal').textContent=total>0?'€'+total.toLocaleString():'€0'
+  document.getElementById('ctsub').textContent='Adjusted income: €'+adj.toLocaleString()
+  document.getElementById('cmaint').textContent=maint>0?'€'+maint.toLocaleString():'€0'
+  document.getElementById('cfee').textContent=t.fee
+  document.getElementById('cph').style.display='none'
+  document.getElementById('cres').style.display='flex'
+  cShown=true
+}
+
+// ── WORK TRACKER
+const LIMIT=8424
+let tEnts=[{id:1,date:'June 2025',hours:40,rate:13.5},{id:2,date:'July 2025',hours:80,rate:13.5},{id:3,date:'Aug 2025',hours:80,rate:13.5}]
+let dwEnts=[]
+function tRender(ents,ids){
+  const[tv,bar,st,el,rem,remi,info]=ids
+  const total=ents.reduce((s,e)=>s+e.hours*e.rate,0)
+  const pct=Math.min(total/LIMIT*100,100),rem2=Math.max(LIMIT-total,0)
+  const isDanger=pct>=90,isWarn=pct>=75
+  const col=isDanger?'var(--rd)':isWarn?'var(--gd)':'var(--gr)'
+  const fmt=n=>n.toLocaleString(undefined,{maximumFractionDigits:0})
+  if(tv){const e=document.getElementById(tv);if(e){e.textContent='€'+fmt(total);e.style.color=col}}
+  if(bar){const e=document.getElementById(bar);if(e){e.style.width=pct+'%';e.style.background=col}}
+  if(st){const e=document.getElementById(st);if(e){e.textContent=isDanger?'🚨 Danger zone':isWarn?'⚠️ Getting close':'🛡️ Safe';e.className='sp '+(isDanger?'sp-d':isWarn?'sp-w':'sp-s')}}
+  if(rem){const e=document.getElementById(rem);if(e)e.textContent='€'+fmt(rem2)}
+  if(remi){const e=document.getElementById(remi);if(e)e.textContent='€'+fmt(rem2)+' remaining'}
+  if(info){const e=document.getElementById(info);if(e)e.innerHTML=isDanger?`<p>🚨 <strong>You've hit the limit.</strong> Contact SUSI immediately.</p>`:isWarn?`<p>⚠️ Getting close — only <strong>€${fmt(rem2)}</strong> left.</p>`:`<p>✅ Safe — you can earn <strong>€${fmt(rem2)}</strong> more this summer.</p>`}
+  if(el){
+    const e=document.getElementById(el);if(!e)return;e.innerHTML=''
+    ents.forEach(en=>{
+      e.innerHTML+=`<div class="ent"><span class="ed">${en.date}</span><span class="ei">${en.hours}h×€${en.rate}</span><span class="ea">€${fmt(en.hours*en.rate)}</span><button class="edel" onclick="tDel(${en.id},'${el}')">×</button></div>`
+    })
+  }
+}
+function tAdd(){
+  const d=document.getElementById('tdate').value,h=+document.getElementById('thours').value,r=+document.getElementById('trate').value
+  if(!d||!h||!r)return
+  tEnts.push({id:Date.now(),date:d,hours:h,rate:r})
+  document.getElementById('tdate').value='';document.getElementById('thours').value=''
+  tRender(tEnts,['ttotal','tbar','tstatus','tents','tremain','tremain-inline','tinfo'])
+}
+function dwAdd(){
+  const d=document.getElementById('dwdate').value,h=+document.getElementById('dwhours').value,r=+document.getElementById('dwrate').value
+  if(!d||!h||!r)return
+  dwEnts.push({id:Date.now(),date:d,hours:h,rate:r})
+  document.getElementById('dwdate').value='';document.getElementById('dwhours').value=''
+  tRender(dwEnts,['dwtotal','dwbar','dwstatus','dwents','dwremain',null,null])
+}
+function tDel(id,listId){
+  if(listId==='tents'){tEnts=tEnts.filter(e=>e.id!==id);tRender(tEnts,['ttotal','tbar','tstatus','tents','tremain','tremain-inline','tinfo'])}
+  else{dwEnts=dwEnts.filter(e=>e.id!==id);tRender(dwEnts,['dwtotal','dwbar','dwstatus','dwents','dwremain',null,null])}
+}
+tRender(tEnts,['ttotal','tbar','tstatus','tents','tremain','tremain-inline','tinfo'])
+tRender(dwEnts,['dwtotal','dwbar','dwstatus','dwents','dwremain',null,null])
+
+// ── CITY COMPARE
+const CITIES={Dublin:{rent:1050,food:320,transport:100,social:150,misc:80,col:'#00e896'},Cork:{rent:680,food:280,transport:75,social:120,misc:65,col:'#f7c948'},Galway:{rent:660,food:270,transport:65,social:115,misc:60,col:'#4ab8ff'},Limerick:{rent:590,food:255,transport:60,social:100,misc:55,col:'#f472b6'}}
+const CNAMES={rent:'Accommodation',food:'Food & groceries',transport:'Transport',social:'Social',misc:'Personal'}
+let selC=new Set(['Dublin','Galway'])
+function cMonthly(c){const d=CITIES[c];return d.rent+d.food+d.transport+d.social+d.misc}
+function cityRender(){
+  const dubM=cMonthly('Dublin')
+  const tabs=document.getElementById('ctabs');tabs.innerHTML=''
+  Object.keys(CITIES).forEach(c=>{
+    const m=cMonthly(c),save=dubM-m,on=selC.has(c)
+    const div=document.createElement('div')
+    div.className='ctab card'+(on?' on':'')
+    if(on)div.style.borderColor=CITIES[c].col+'60'
+    div.innerHTML=`<div class="ctn">${c}</div><div class="ctv" style="color:${CITIES[c].col}">€${m.toLocaleString()}</div><div style="font-size:10px;color:var(--mut)">/month</div>${c!=='Dublin'&&save>0?`<div class="cts">Save €${save}/mo</div>`:''}`
+    div.onclick=()=>{if(selC.has(c)){if(selC.size>1)selC.delete(c)}else selC.add(c);cityRender()}
+    tabs.appendChild(div)
+  })
+  const bars=document.getElementById('cbars');bars.innerHTML=''
+  const sel=[...selC]
+  Object.entries(CNAMES).forEach(([key,lbl])=>{
+    const maxV=Math.max(...sel.map(c=>CITIES[c][key]))
+    bars.innerHTML+=`<div class="brow"><div class="blb">${lbl}</div><div class="btr"><div class="bcs">${sel.map(c=>`<div class="bcr"><span class="bcn">${c}</span><div class="bbg"><div class="bf" style="width:${(CITIES[c][key]/maxV)*100}%;background:${CITIES[c].col}99"><span class="bft">€${CITIES[c][key]}</span></div></div></div>`).join('')}</div></div></div>`
+  })
+}
+cityRender()
+
+// ── RENT CHECKER
+let rRent=null,rTax=null
+function rSet(f,v){
+  if(f==='rent'){rRent=v;document.getElementById('rrent-y').classList.toggle('on',v);document.getElementById('rrent-n').classList.toggle('on',!v)}
+  else{rTax=v;document.getElementById('rtax-y').classList.toggle('on',v);document.getElementById('rtax-n').classList.toggle('on',!v)}
+  document.getElementById('ramt-wrap').style.display=(rRent&&rTax)?'block':'none'
+}
+function rUpdate(){document.getElementById('ramt-d').textContent='€'+document.getElementById('ramt').value}
+function rCheck(){
+  if(rRent===null||rTax===null)return
+  document.getElementById('rprompt').style.display='none'
+  document.getElementById('rres').style.display='flex'
+  const card=document.getElementById('rresult-main')
+  if(rRent&&rTax){
+    const credit=Math.min(1000,(+document.getElementById('ramt').value)*12*.2)
+    card.innerHTML=`<div class="dcl" style="color:var(--gr)">✅ You appear eligible!</div><div class="dcv" style="color:var(--gr)">€${credit.toFixed(0)}</div><div class="dcs">estimated 2025 rent tax credit</div>`
+    card.style.borderColor='rgba(0,232,150,.3)'
+  } else {
+    card.innerHTML=`<div class="dcl" style="color:var(--rd)">❌ Not eligible right now</div><div style="font-size:13px;color:var(--sub);margin-top:8px;line-height:1.6">${!rRent?'You need to be paying private rent.':'You need to pay income tax or USC. If you get a part-time job you can claim for 2026.'}<br><br><strong style="color:var(--gr)">💡 Your parents can still claim if they pay your rent!</strong></div>`
+    card.style.borderColor='rgba(255,90,90,.2)'
+  }
+}
+
+// ── FAQ
+function faqT(btn){
+  const item=btn.closest('.faqi'),was=item.classList.contains('open')
+  document.querySelectorAll('.faqi').forEach(i=>i.classList.remove('open'))
+  if(!was)item.classList.add('open')
+}
+
+// ── DASHBOARD
+function openDash(e){if(e)e.preventDefault();document.getElementById('dash').classList.add('open');document.body.style.overflow='hidden'}
+function closeDash(){document.getElementById('dash').classList.remove('open');document.body.style.overflow=''}
+function dShow(id){
+  document.querySelectorAll('.dp').forEach(p=>p.classList.remove('on'))
+  document.querySelectorAll('.db').forEach(b=>b.classList.remove('on'))
+  const page=document.getElementById('dp-'+id)
+  if(page)page.classList.add('on')
+  document.querySelectorAll('.db').forEach(b=>{
+    const txt=b.textContent.toLowerCase()
+    if(id==='overview'&&txt.includes('overview'))b.classList.add('on')
+    else if(id==='susi'&&txt.includes('susi'))b.classList.add('on')
+    else if(id==='rent'&&txt.includes('rent'))b.classList.add('on')
+    else if(id==='work'&&txt.includes('work'))b.classList.add('on')
+    else if(id==='budget'&&txt.includes('budget'))b.classList.add('on')
+    else if(id==='intl'&&txt.includes('inter'))b.classList.add('on')
+    else if(id==='disc'&&txt.includes('disc'))b.classList.add('on')
+  })
+}
+
+// ── DASH SUSI
+let dDeps=0,dDist=false,dShown=false
+function dSetDep(n,btn){
+  dDeps=n
+  document.querySelectorAll('#ddep .pill').forEach((p,i)=>p.classList.toggle('on',i===n))
+  document.getElementById('ddep-d').textContent=n
+  if(dShown)dCalc()
+}
+function dSetDist(v){
+  dDist=v
+  document.getElementById('dadj').classList.toggle('on',!v)
+  document.getElementById('dnadj').classList.toggle('on',v)
+  if(dShown)dCalc()
+}
+function dCalcU(){
+  document.getElementById('dinc-d').textContent='€'+(+document.getElementById('dinc').value).toLocaleString()
+  if(dShown)dCalc()
+}
+function dCalc(){
+  const inc=+document.getElementById('dinc').value
+  const{t,maint,total}=getTier(inc,dDeps,dDist)
+  document.getElementById('dmaint').textContent=maint>0?'€'+maint.toLocaleString():'€0'
+  document.getElementById('dfee').textContent=t.fee
+  document.getElementById('dtotal').textContent=total>0?'€'+total.toLocaleString():'€0'
+  document.getElementById('dtier').textContent='Grant tier: '+t.lbl+'. Estimate only — confirm at susi.ie.'
+  document.getElementById('dres').style.display='flex'
+  dShown=true
+}
+
+// ── DASH RENT
+let drRent=null,drTax=null
+function drSet(f,v){
+  if(f==='rent'){drRent=v;document.getElementById('drrent-y').classList.toggle('on',v);document.getElementById('drrent-n').classList.toggle('on',!v)}
+  else{drTax=v;document.getElementById('drtax-y').classList.toggle('on',v);document.getElementById('drtax-n').classList.toggle('on',!v)}
+  document.getElementById('drslider').style.display=(drRent&&drTax)?'block':'none'
+}
+function drUpdate(){document.getElementById('dramt-d').textContent='€'+document.getElementById('dramt').value}
+function drCheck(){
+  if(drRent===null||drTax===null)return
+  document.getElementById('drres').style.display='flex'
+  const card=document.getElementById('drresult')
+  if(drRent&&drTax){
+    const credit=Math.min(1000,(+document.getElementById('dramt').value)*12*.2)
+    card.innerHTML=`<div class="dcl" style="color:var(--gr)">✅ Eligible!</div><div class="dcv" style="color:var(--gr)">€${credit.toFixed(0)}</div><div class="dcs">estimated 2025 credit</div>`
+    card.style.borderColor='rgba(0,232,150,.3)'
+  } else {
+    card.innerHTML=`<div class="dcl" style="color:var(--rd)">❌ Not eligible right now</div><div style="font-size:13px;color:var(--sub);margin-top:7px">${!drRent?'Need to pay private rent.':'Need to pay income tax/USC.'}</div>`
+    card.style.borderColor='rgba(255,90,90,.2)'
+  }
+}
+
+// ── BUDGET
+let bItems=[{id:1,lbl:'Room rent',cat:'Rent',amt:650},{id:2,lbl:'Groceries',cat:'Food',amt:220},{id:3,lbl:'Leap Card',cat:'Transport',amt:75},{id:4,lbl:'Student contrib',cat:'College fees',amt:167},{id:5,lbl:'Social',cat:'Social',amt:80}]
+const BCOLS={Rent:'#00e896',Food:'#f7c948',Transport:'#4ab8ff',Social:'#f472b6',Subscriptions:'#a78bfa','College fees':'#fb923c',Other:'#6b9a8a'}
+function bAdd(){
+  const l=document.getElementById('bilbl').value,c=document.getElementById('bicat').value,a=+document.getElementById('biamt').value
+  if(!l||!a)return
+  bItems.push({id:Date.now(),lbl:l,cat:c,amt:a})
+  document.getElementById('bilbl').value='';document.getElementById('biamt').value=''
+  bRender()
+}
+function bDel(id){bItems=bItems.filter(x=>x.id!==id);bRender()}
+function bRender(){
+  const inc=+document.getElementById('binc').value,total=bItems.reduce((s,i)=>s+i.amt,0),surp=inc-total
+  document.getElementById('btotal').textContent='€'+total.toLocaleString()
+  document.getElementById('bsurp').textContent=(surp>=0?'+':'')+'€'+Math.abs(surp).toLocaleString()
+  document.getElementById('bsurp').style.color=surp>=0?'var(--gr)':'var(--rd)'
+  document.getElementById('bsurpc').style.borderColor=surp>=0?'rgba(0,232,150,.2)':'rgba(255,90,90,.2)'
+  const cats={};bItems.forEach(i=>cats[i.cat]=(cats[i.cat]||0)+i.amt)
+  const be=document.getElementById('bbars');be.innerHTML=''
+  Object.entries(cats).forEach(([cat,amt])=>{
+    const col=BCOLS[cat]||'#6b9a8a',pct=(amt/Math.max(total,1))*100
+    be.innerHTML+=`<div style="display:flex;align-items:center;gap:9px;margin-bottom:7px"><span style="width:85px;font-size:11px;color:var(--sub);text-align:right;flex-shrink:0">${cat}</span><div style="flex:1;height:17px;background:var(--bd);border-radius:4px;overflow:hidden"><div style="height:100%;width:${pct}%;background:${col}99;border-radius:4px;display:flex;align-items:center;padding-left:7px"><span style="font-size:10px;font-weight:700;color:rgba(4,8,16,.8)">€${amt}</span></div></div></div>`
+  })
+  const ie=document.getElementById('bitems');ie.innerHTML=''
+  bItems.forEach(item=>{
+    const col=BCOLS[item.cat]||'#6b9a8a'
+    ie.innerHTML+=`<div style="display:flex;align-items:center;gap:9px;padding:8px 12px;background:var(--s1);border:1px solid var(--bd);border-radius:var(--r3);margin-bottom:4px"><span style="width:7px;height:7px;border-radius:50%;background:${col};flex-shrink:0"></span><span style="flex:1;font-size:13px;color:var(--tx)">${item.lbl}</span><span style="font-size:11px;color:var(--mut)">${item.cat}</span><span style="font-size:13px;font-weight:700;color:var(--gr);width:45px;text-align:right">€${item.amt}</span><button onclick="bDel(${item.id})" style="background:none;border:none;color:var(--mut);cursor:pointer;font-size:13px;padding:0 2px;transition:color .2s" onmouseover="this.style.color='var(--rd)'" onmouseout="this.style.color='var(--mut)'">×</button></div>`
+  })
+}
+bRender()
+
+// sticky upgrade bar
+let sbarDismissed = false
+window.addEventListener('scroll', () => {
+  if (sbarDismissed) return
+  const bar = document.getElementById('sticky-bar')
+  if (scrollY > 600) bar.classList.add('show')
+  else bar.classList.remove('show')
+}, {passive: true})
+
+// mobile menu
+function toggleMobileMenu() {
+  document.getElementById('mobile-menu').classList.toggle('open')
+}
+function closeMobileMenu() {
+  document.getElementById('mobile-menu').classList.remove('open')
+}
+// close mobile menu on outside click
+document.addEventListener('click', e => {
+  const menu = document.getElementById('mobile-menu')
+  const ham = document.getElementById('hamburger')
+  if (menu.classList.contains('open') && !menu.contains(e.target) && !ham.contains(e.target)) {
+    menu.classList.remove('open')
+  }
+})
+
+</script>
+
+<div id="sticky-bar">
+  <div class="sbar-txt">💡 <strong>Don't miss out</strong> — students using Pro find an average of <strong>€1,340</strong> in grants and credits</div>
+  <div class="sbar-right">
+    <button class="btn btn-g btn-sm" onclick="openDash(event)">Upgrade to Pro — €4.99/mo</button>
+    <button class="sbar-dismiss" onclick="document.getElementById('sticky-bar').classList.remove('show')">×</button>
+  </div>
+</div>
+
+</body>
+</html>
